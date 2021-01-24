@@ -6,7 +6,6 @@ import Swal from 'sweetalert2';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { LpjService } from 'src/app/services/firebase/lpj.service';
-import { Ukm } from 'src/app/models/ukm.model';
 import * as moment from 'moment';
 import { Lpj } from 'src/app/models/lpj.model';
 import { Subject } from 'rxjs';

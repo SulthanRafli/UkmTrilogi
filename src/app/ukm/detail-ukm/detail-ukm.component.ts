@@ -1,11 +1,7 @@
-import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { AngularFireStorage } from '@angular/fire/storage';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { catchError, finalize, map, take, takeUntil } from 'rxjs/operators';
-import Swal from 'sweetalert2';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import { catchError, map } from 'rxjs/operators';
+import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
-import { UkmService } from 'src/app/services/firebase/ukm.service';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { combineLatest, Subject, throwError } from 'rxjs';
 import { Ukm } from 'src/app/models/ukm.model';

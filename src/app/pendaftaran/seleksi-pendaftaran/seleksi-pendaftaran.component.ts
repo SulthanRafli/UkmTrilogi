@@ -5,7 +5,6 @@ import { MatPaginator } from '@angular/material/paginator';
 import { Pendaftaran } from 'src/app/models/pendaftaran.model';
 import { PendaftaranService } from 'src/app/services/firebase/pendaftaran.service';
 import { ngxLoadingAnimationTypes } from 'ngx-loading'
-import { ActivatedRoute } from '@angular/router';
 import { Ukm } from 'src/app/models/ukm.model';
 import Swal from 'sweetalert2';
 import { AnggotaService } from 'src/app/services/firebase/anggota.service';

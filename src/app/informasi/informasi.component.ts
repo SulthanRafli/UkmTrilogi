@@ -5,7 +5,6 @@ import { MatPaginator } from '@angular/material/paginator';
 import { Kegiatan } from 'src/app/models/kegiatan.model';
 import { KegiatanService } from 'src/app/services/firebase/kegiatan.service';
 import { ngxLoadingAnimationTypes } from 'ngx-loading'
-import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-informasi',

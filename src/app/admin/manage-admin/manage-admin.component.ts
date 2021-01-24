@@ -5,7 +5,6 @@ import { MatPaginator } from '@angular/material/paginator';
 import { Subject } from 'rxjs';
 import { Admin } from 'src/app/models/admin.model';
 import { AdminService } from 'src/app/services/firebase/admin.service';
-import { finalize, take, takeUntil } from 'rxjs/operators';
 import { ngxLoadingAnimationTypes } from 'ngx-loading'
 import Swal from 'sweetalert2';
 import { AuthService } from 'src/app/services/auth/auth.service';

@@ -1,12 +1,10 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { AngularFireStorage } from '@angular/fire/storage';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { finalize, take, takeUntil } from 'rxjs/operators';
-import Swal from 'sweetalert2';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { PendaftaranService } from 'src/app/services/firebase/pendaftaran.service';
-import * as moment from 'moment';
 import { ngxLoadingAnimationTypes } from 'ngx-loading';
 import { Subject } from 'rxjs';
 import { Pendaftaran } from 'src/app/models/pendaftaran.model';
