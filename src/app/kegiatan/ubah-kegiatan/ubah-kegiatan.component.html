@@ -1,0 +1,153 @@
+<div class="page-header">
+  <h3 class="page-title">Manage Kegiatan</h3>
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        <a routerLink="/kegiatan/manage-kegiatan">Kegiatan</a>
+      </li>
+      <li class="breadcrumb-item active" aria-current="page">Ubah Kegiatan</li>
+    </ol>
+  </nav>
+</div>
+<div class="row">
+  <div class="col-12 grid-margin">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Form Kegiatan</h4>
+        <div [formGroup]="kegiatanForm" class="form-sample">
+          <p class="card-description"></p>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Nama Kegiatan</label>
+                <div class="col-sm-9">
+                  <input
+                    [class.err-input]="
+                      !kegiatanForm.controls.nama.valid &&
+                      (kegiatanForm.controls.nama.dirty || isFormEmpty)
+                    "
+                    type="text"
+                    class="form-control"
+                    placeholder="Nama Kegiatan"
+                    formControlName="nama"
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Tanggal</label>
+                <div class="col-sm-9">
+                  <input
+                    [class.err-input]="
+                      !kegiatanForm.controls.tanggal.valid &&
+                      (kegiatanForm.controls.tanggal.dirty || isFormEmpty)
+                    "
+                    type="date"
+                    class="form-control bg-white"
+                    [value]="kegiatanForm.value.tanggal | date: 'yyyy-MM-dd'"
+                    (click)="picker1.open()"
+                    readonly
+                  />
+                  <mat-form-field>
+                    <input
+                      matInput
+                      readonly
+                      formControlName="tanggal"
+                      [matDatepicker]="picker1"
+                    />
+                    <mat-datepicker-toggle
+                      matSuffix
+                      [for]="picker1"
+                    ></mat-datepicker-toggle>
+                    <mat-datepicker touchUi #picker1></mat-datepicker>
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Jam Mulai</label>
+                <div class="col-sm-9">
+                  <input
+                    [class.err-input]="
+                      !kegiatanForm.controls.jamMulai.valid &&
+                      (kegiatanForm.controls.jamMulai.dirty || isFormEmpty)
+                    "
+                    type="time"
+                    class="form-control"
+                    placeholder="Jam Mulai"
+                    formControlName="jamMulai"
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Jam Selesai</label>
+                <div class="col-sm-9">
+                  <input
+                    [class.err-input]="
+                      !kegiatanForm.controls.jamSelesai.valid &&
+                      (kegiatanForm.controls.jamSelesai.dirty || isFormEmpty)
+                    "
+                    type="time"
+                    class="form-control"
+                    placeholder="Jam Selesai"
+                    formControlName="jamSelesai"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Deskripsi</label>
+                <div class="col-sm-9">
+                  <textarea
+                    [class.err-input]="
+                      !kegiatanForm.controls.deskripsi.valid &&
+                      (kegiatanForm.controls.deskripsi.dirty || isFormEmpty)
+                    "
+                    class="form-control"
+                    placeholder="Deskripsi"
+                    formControlName="deskripsi"
+                  ></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-12 rght">
+              <button
+                class="btn btn-gradient-danger btn-md mr-2"
+                (click)="back()"
+              >
+                Batal</button
+              ><button
+                type="submit"
+                class="btn btn-gradient-success btn-md"
+                (click)="save()"
+              >
+                Simpan
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <ngx-loading
+        [show]="loading"
+        [config]="{
+          primaryColour: primaryColour,
+          secondaryColour: secondaryColour,
+          tertiaryColour: primaryColour,
+          backdropBorderRadius: '3px'
+        }"
+        [template]="loadingTemplate"
+      ></ngx-loading>
+    </div>
+  </div>
+</div>

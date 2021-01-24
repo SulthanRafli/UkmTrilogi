@@ -1,0 +1,130 @@
+<div class="page-header">
+  <h3 class="page-title">
+    <span class="page-title-icon bg-gradient-primary text-white mr-2">
+      <i class="mdi mdi-home"></i>
+    </span>
+    Dashboard
+  </h3>
+</div>
+<div class="row">
+  <div class="col-md-4 stretch-card grid-margin">
+    <div class="card bg-gradient-danger card-img-holder text-white">
+      <div class="card-body">
+        <img
+          src="assets/images/dashboard/circle.svg"
+          class="card-img-absolute"
+          alt="circle-image"
+        />
+        <ng-containter *ngIf="isAdministrator; else notAdmin">
+          <h4 class="font-weight-normal mb-3">
+            Total Admin
+            <i class="mdi mdi-account-multiple mdi-24px float-right"></i>
+          </h4>
+          <h2 class="mb-5">{{ jumlahAdmin }}</h2>
+        </ng-containter>
+        <ng-template #notAdmin>
+          <h4 class="font-weight-normal mb-3">
+            Total Anggota
+            <i class="mdi mdi-account-multiple mdi-24px float-right"></i>
+          </h4>
+          <h2 class="mb-5">{{ jumlahAnggota }}</h2>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4 stretch-card grid-margin">
+    <div class="card bg-gradient-info card-img-holder text-white">
+      <div class="card-body">
+        <img
+          src="assets/images/dashboard/circle.svg"
+          class="card-img-absolute"
+          alt="circle-image"
+        />
+        <ng-containter *ngIf="isAdministrator; else notAdmin2">
+          <h4 class="font-weight-normal mb-3">
+            Total Ukm
+            <i class="mdi mdi-account-multiple mdi-24px float-right"></i>
+          </h4>
+          <h2 class="mb-5">{{ jumlahUkm }}</h2>
+        </ng-containter>
+        <ng-template #notAdmin2>
+          <h4 class="font-weight-normal mb-3">
+            Total Berita
+            <i class="mdi mdi-newspaper mdi-24px float-right"></i>
+          </h4>
+          <h2 class="mb-5">{{ jumlahBerita }}</h2>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4 stretch-card grid-margin">
+    <div class="card bg-gradient-success card-img-holder text-white">
+      <div class="card-body">
+        <img
+          src="assets/images/dashboard/circle.svg"
+          class="card-img-absolute"
+          alt="circle-image"
+        />
+        <h4 class="font-weight-normal mb-3">
+          Total Kegiatan
+          <i class="mdi mdi-bullhorn mdi-24px float-right"></i>
+        </h4>
+        <h2 class="mb-5">{{ jumlahKegiatan }}</h2>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-12 grid-margin">
+    <div class="card">
+      <div class="card-body">
+        <div class="table-responsive">
+          <full-calendar [options]="calendarOptions"></full-calendar>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template
+  #infoKegiatan
+  let-modal
+  class="modal fade"
+  id="exampleModal-2"
+  aria-labelledby="exampleModalLabel-2"
+>
+  <div class="modal-content">
+    <div class="modal-header">
+      <h5 class="modal-title" id="exampleModalLabel-2">Detail Event</h5>
+      <button
+        type="button"
+        class="close"
+        (click)="modal.dismiss()"
+        aria-label="Close"
+      >
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <p>
+        <span class="font-weight-bold">{{ title }}</span> yang diselenggarakan
+        oleh <span class="font-weight-bold">{{ namaUkm }}</span> akan
+        berlangsung tanggal
+        <span class="font-weight-bold">{{ tanggal }}</span> jam
+        <span class="font-weight-bold"
+          >{{ jamMulai }} s.d. {{ jamSelesai }}</span
+        >
+      </p>
+    </div>
+  </div>
+</ng-template>
+<ngx-loading
+  [show]="loading"
+  [config]="{
+    primaryColour: primaryColour,
+    secondaryColour: secondaryColour,
+    tertiaryColour: primaryColour,
+    backdropBorderRadius: '3px'
+  }"
+  [template]="loadingTemplate"
+></ngx-loading>

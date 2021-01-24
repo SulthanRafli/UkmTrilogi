@@ -1,0 +1,50 @@
+<div class="row">
+  <div class="col-md-12 stretch-card grid-margin">
+    <div class="card bg-gradient-primary card-img-holder text-white">
+      <div class="card-body">
+        <img
+          src="assets/images/dashboard/circle.svg"
+          class="card-img-absolute"
+          alt="circle-image"
+        />
+        <h2 class="font-weight-normal txt-center">Profile UKM</h2>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row" *ngFor="let res of ukm">
+  <div class="col-md-12 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-9 pr-3">
+            <h1 class="text-primary">{{ res.nama | uppercase }}</h1>
+            <h3 class="text-muted txt-justify">
+              {{ res.deskripsi }}
+            </h3>
+          </div>
+          <div class="col-3 pl-3">
+            <img
+              [src]="res.imageLogoUrl"
+              class="mr-2 w-100 effect"
+              alt="image"
+              placement="bottom"
+              [ngbTooltip]="res.email"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<ngx-loading
+[show]="loading"
+[config]="{
+  animationType: ngxLoadingAnimationTypes.cubeGrid,
+  primaryColour: primaryColour,
+  secondaryColour: secondaryColour,
+  tertiaryColour: primaryColour,
+  backdropBorderRadius: '3px'
+}"
+[template]="loadingTemplate"
+></ngx-loading>

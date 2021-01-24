@@ -1,0 +1,271 @@
+<div class="page-header">
+  <h3 class="page-title">Pendaftaran</h3>
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        <a routerLink="/pendaftaran/laporan-pendaftaran">Laporan Pendaftaran</a>
+      </li>
+      <li class="breadcrumb-item active" aria-current="page">
+        Detail Pendaftaran
+      </li>
+    </ol>
+  </nav>
+</div>
+<div class="row">
+  <div class="col-12 grid-margin">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Form Pendaftaran</h4>
+        <div [formGroup]="pendaftaranForm" class="form-sample">
+          <p class="card-description"></p>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Nomor Pendaftaran</label>
+                <div class="col-sm-9">
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="Nomor Pendaftaran"
+                    formControlName="nomorPendaftaran"
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Nama Lengkap</label>
+                <div class="col-sm-9">
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="Nama Lengkap"
+                    formControlName="nama"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Email</label>
+                <div class="col-sm-9">
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="Email"
+                    formControlName="email"
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Jenis Kelamin</label>
+                <div class="col-sm-9">
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="Jenis Kelamin"
+                    formControlName="jenisKelamin"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Nomor Handphone</label>
+                <div class="col-sm-9">
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="Nomor Handphone"
+                    formControlName="telp"
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Tempat Lahir</label>
+                <div class="col-sm-9">
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="Tempat Lahir"
+                    formControlName="tempatLahir"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Tanggal Lahir</label>
+                <div class="col-sm-9">
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="Tanggal Lahir"
+                    formControlName="tanggalLahir"
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Jurusan</label>
+                <div class="col-sm-9">
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="Jurusan"
+                    formControlName="jurusan"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Fakultas</label>
+                <div class="col-sm-9">
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="Fakultas"
+                    formControlName="fakultas"
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Alamat</label>
+                <div class="col-sm-9">
+                  <textarea
+                    class="form-control"
+                    rows="4"
+                    placeholder="Alamat"
+                    formControlName="alamat"
+                  ></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Foto</label>
+                <div class="col-sm-9">
+                  <input type="file" class="file-upload-default" />
+                  <div class="input-group col-xs-12">
+                    <input
+                      type="text"
+                      class="form-control"
+                      formControlName="fileName"
+                      placeholder="Upload Image"
+                    />
+                    <span class="input-group-append">
+                      <button
+                        class="file-upload-browse btn btn-gradient-primary"
+                        type="button"
+                        (click)="downloadMyFile()"
+                      >
+                        Download
+                      </button>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <br />
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Hobi</label>
+                <div class="col-sm-9">
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="Hobi"
+                    formControlName="hobi"
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Bakat</label>
+                <div class="col-sm-9">
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="Bakat"
+                    formControlName="bakat"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Alasan Mendaftar</label>
+                <div class="col-sm-9">
+                  <textarea
+                    class="form-control"
+                    rows="4"
+                    placeholder="Alasan Mendaftar"
+                    formControlName="alasan"
+                  ></textarea>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group row">
+                <label class="col-sm-3 col-form-label"
+                  >Apa yang anda ketahui tentang UKM ini ?</label
+                >
+                <div class="col-sm-9">
+                  <textarea
+                    class="form-control"
+                    rows="4"
+                    placeholder="Isi Pertanyaan"
+                    formControlName="tanya"
+                  ></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-12 rght">
+              <button
+                class="btn btn-gradient-danger btn-md mr-2"
+                (click)="back()"
+              >
+                Kembali
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <ngx-loading
+        [show]="loading"
+        [config]="{
+          primaryColour: primaryColour,
+          secondaryColour: secondaryColour,
+          tertiaryColour: primaryColour,
+          backdropBorderRadius: '3px'
+        }"
+        [template]="loadingTemplate"
+      ></ngx-loading>
+    </div>
+  </div>
+</div>

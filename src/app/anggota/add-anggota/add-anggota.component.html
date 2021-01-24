@@ -1,0 +1,256 @@
+<div class="page-header">
+  <h3 class="page-title">Manage Anggota</h3>
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        <a routerLink="/anggota/manage-anggota">Anggota</a>
+      </li>
+      <li class="breadcrumb-item active" aria-current="page">Tambah Anggota</li>
+    </ol>
+  </nav>
+</div>
+<div class="row">
+  <div class="col-12 grid-margin">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Form Anggota</h4>
+        <div [formGroup]="anggotaForm" class="form-sample">
+          <p class="card-description"></p>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Nama Anggota</label>
+                <div class="col-sm-9">
+                  <input
+                    type="text"
+                    [class.err-input]="
+                      !anggotaForm.controls.nama.valid &&
+                      (anggotaForm.controls.nama.dirty || isFormEmpty)
+                    "
+                    class="form-control"
+                    placeholder="Nama Anggota"
+                    formControlName="nama"
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Email</label>
+                <div class="col-sm-9">
+                  <input
+                    type="email"
+                    [class.err-input]="
+                      !anggotaForm.controls.email.valid &&
+                      (anggotaForm.controls.email.dirty || isFormEmpty)
+                    "
+                    class="form-control"
+                    placeholder="Email"
+                    formControlName="email"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Jenis Kelamin</label>
+                <div class="col-sm-9">
+                  <select
+                    [class.err-input]="
+                      !anggotaForm.controls.jenisKelamin.valid &&
+                      (anggotaForm.controls.jenisKelamin.dirty || isFormEmpty)
+                    "
+                    formControlName="jenisKelamin"
+                    class="form-control"
+                  >
+                    <option value="Laki - laki">Laki - laki</option>
+                    <option value="Perempuan">Perempuan</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Nomor Handphone</label>
+                <div class="col-sm-9">
+                  <input
+                    type="text"
+                    [class.err-input]="
+                      !anggotaForm.controls.telp.valid &&
+                      (anggotaForm.controls.telp.dirty || isFormEmpty)
+                    "
+                    class="form-control"
+                    placeholder="Nomor Handphone"
+                    formControlName="telp"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Tempat Lahir</label>
+                <div class="col-sm-9">
+                  <input
+                    type="text"
+                    [class.err-input]="
+                      !anggotaForm.controls.tempatLahir.valid &&
+                      (anggotaForm.controls.tempatLahir.dirty || isFormEmpty)
+                    "
+                    class="form-control"
+                    placeholder="Tempat Lahir"
+                    formControlName="tempatLahir"
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Tanggal Lahir</label>
+                <div class="col-sm-9">
+                  <input
+                    [class.err-input]="
+                      !anggotaForm.controls.tanggalLahir.valid &&
+                      (anggotaForm.controls.tanggalLahir.dirty || isFormEmpty)
+                    "
+                    type="date"
+                    class="form-control bg-white"
+                    [value]="
+                      anggotaForm.value.tanggalLahir | date: 'yyyy-MM-dd'
+                    "
+                    (click)="picker1.open()"
+                    readonly
+                  />
+                  <mat-form-field>
+                    <input
+                      matInput
+                      readonly
+                      formControlName="tanggalLahir"
+                      [matDatepicker]="picker1"
+                    />
+                    <mat-datepicker-toggle
+                      matSuffix
+                      [for]="picker1"
+                    ></mat-datepicker-toggle>
+                    <mat-datepicker touchUi #picker1></mat-datepicker>
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Jurusan</label>
+                <div class="col-sm-9">
+                  <input
+                    type="text"
+                    [class.err-input]="
+                      !anggotaForm.controls.jurusan.valid &&
+                      (anggotaForm.controls.jurusan.dirty || isFormEmpty)
+                    "
+                    class="form-control"
+                    placeholder="Jurusan"
+                    formControlName="jurusan"
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Fakultas</label>
+                <div class="col-sm-9">
+                  <select
+                    [class.err-input]="
+                      !anggotaForm.controls.fakultas.valid &&
+                      (anggotaForm.controls.fakultas.dirty || isFormEmpty)
+                    "
+                    formControlName="fakultas"
+                    class="form-control"
+                  >
+                    <option value="Ekonomi">Ekonomi</option>
+                    <option value="Teknik">Teknik</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Alamat</label>
+                <div class="col-sm-9">
+                  <textarea
+                    class="form-control"
+                    rows="4"
+                    [class.err-input]="
+                      !anggotaForm.controls.alamat.valid &&
+                      (anggotaForm.controls.alamat.dirty || isFormEmpty)
+                    "
+                    placeholder="Alamat"
+                    formControlName="alamat"
+                  ></textarea>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Foto</label>
+                <div class="col-sm-9">
+                  <input
+                    type="file"
+                    #photo
+                    accept="image/x-png,image/jpeg"
+                    class="file-upload-default"
+                    (change)="uploadPhoto()"
+                  />
+                  <div class="input-group col-xs-12">
+                    <input
+                      type="text"
+                      [class.err-input]="
+                        !anggotaForm.controls.fileName.valid &&
+                        (anggotaForm.controls.fileName.dirty || isFormEmpty)
+                      "
+                      class="form-control file-upload-info"
+                      readonly
+                      formControlName="fileName"
+                      placeholder="Upload Image"
+                    />
+                    <span class="input-group-append">
+                      <button
+                        class="file-upload-browse btn btn-gradient-primary"
+                        type="button"
+                        (click)="getPhoto()"
+                      >
+                        Upload
+                      </button>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-12 rght">
+              <button
+                class="btn btn-gradient-danger btn-md mr-2"
+                (click)="back()"
+              >
+                Batal</button
+              ><button
+                type="submit"
+                class="btn btn-gradient-success btn-md"
+                (click)="save()"
+              >
+                Simpan
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

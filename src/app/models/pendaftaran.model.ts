@@ -1,0 +1,25 @@
+export class Pendaftaran {
+    constructor(
+        public id?: string,
+        public idUkm?: string,
+        public namaUkm?: string,
+        public nomorPendaftaran?: string,
+        public nama?: string,
+        public tempatLahir?: string,
+        public tanggalLahir?: string,
+        public jurusan?: string,
+        public fakultas?: string,
+        public alamat?: string,
+        public jenisKelamin?: string,
+        public email?: string,
+        public telp?: string,
+        public fileName?: string,
+        public imageUrl?: string,
+        public hobi?: string,
+        public bakat?: string,
+        public alasan?: string,
+        public tanya?: string,   
+        public tanggalDaftar?: string,        
+        public status?: string,        
+    ) { }
+}

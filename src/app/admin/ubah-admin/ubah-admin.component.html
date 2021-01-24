@@ -1,0 +1,168 @@
+<div class="page-header">
+  <h3 class="page-title">Manage Admin</h3>
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        <a routerLink="/admin/manage-admin">Admin</a>
+      </li>
+      <li class="breadcrumb-item active" aria-current="page">Ubah Admin</li>
+    </ol>
+  </nav>
+</div>
+<div class="row">
+  <div class="col-12 grid-margin">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Form Admin</h4>
+        <div [formGroup]="adminForm" class="form-sample">
+          <p class="card-description"></p>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Nama</label>
+                <div class="col-sm-9">
+                  <input
+                    type="text"
+                    [class.err-input]="
+                      !adminForm.controls.nama.valid &&
+                      (adminForm.controls.nama.dirty || isFormEmpty)
+                    "
+                    class="form-control"
+                    placeholder="Nama"
+                    formControlName="nama"
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Nomor Handphone</label>
+                <div class="col-sm-9">
+                  <input
+                    type="tel"
+                    [class.err-input]="
+                      !adminForm.controls.telp.valid &&
+                      (adminForm.controls.telp.dirty || isFormEmpty)
+                    "
+                    class="form-control"
+                    placeholder="Nomor Handphone"
+                    formControlName="telp"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Email</label>
+                <div class="col-sm-9">
+                  <input
+                    type="email"
+                    [class.err-input]="
+                      !adminForm.controls.email.valid &&
+                      (adminForm.controls.email.dirty || isFormEmpty)
+                    "
+                    class="form-control"
+                    placeholder="Email"
+                    formControlName="email"
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Password</label>
+                <div class="col-sm-9">
+                  <input
+                    type="text"
+                    [class.err-input]="
+                      !adminForm.controls.password.valid &&
+                      (adminForm.controls.password.dirty || isFormEmpty)
+                    "
+                    class="form-control"
+                    placeholder="Password"
+                    formControlName="password"
+                  />
+                  <p
+                    class="pt-2 text-danger text-sm"
+                    *ngIf="
+                      !adminForm.controls.password.valid &&
+                      (adminForm.controls.password.dirty || isFormEmpty)
+                    "
+                  >
+                    *kata sandi harus setidaknya 6 karakter
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Foto</label>
+                <div class="col-sm-9">
+                  <input
+                    type="file"
+                    #photo
+                    accept="image/x-png,image/jpeg"
+                    class="file-upload-default"
+                    (change)="uploadPhoto()"
+                  />
+                  <div class="input-group col-xs-12">
+                    <input
+                      type="text"
+                      [class.err-input]="
+                        !adminForm.controls.fileName.valid &&
+                        (adminForm.controls.fileName.dirty || isFormEmpty)
+                      "
+                      class="form-control file-upload-info"
+                      readonly
+                      formControlName="fileName"
+                      placeholder="Upload Image"
+                    />
+                    <span class="input-group-append">
+                      <button
+                        class="file-upload-browse btn btn-gradient-primary"
+                        type="button"
+                        (click)="getPhoto()"
+                      >
+                        Upload
+                      </button>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-12 rght">
+              <button
+                class="btn btn-gradient-danger btn-md mr-2"
+                (click)="back()"
+              >
+                Batal</button
+              ><button
+                type="submit"
+                class="btn btn-gradient-success btn-md"
+                (click)="save()"
+              >
+                Simpan
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <ngx-loading
+        [show]="loading"
+        [config]="{
+          primaryColour: primaryColour,
+          secondaryColour: secondaryColour,
+          tertiaryColour: primaryColour,
+          backdropBorderRadius: '3px'
+        }"
+        [template]="loadingTemplate"
+      ></ngx-loading>
+    </div>
+  </div>
+</div>

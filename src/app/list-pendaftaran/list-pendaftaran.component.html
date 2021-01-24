@@ -1,0 +1,83 @@
+<div class="row">
+  <div class="col-md-12 stretch-card grid-margin">
+    <div class="card bg-gradient-primary card-img-holder text-white">
+      <div class="card-body">
+        <img
+          src="assets/images/dashboard/circle.svg"
+          class="card-img-absolute"
+          alt="circle-image"
+        />
+        <h2 class="font-weight-normal txt-center">Pendaftaran</h2>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div
+    class="col-md-3 grid-margin stretch-card"
+    *ngFor="let res of jadwalPendaftaran"
+  >
+    <div class="card">
+      <div class="card-body rounded brd-primary">
+        <h4 class="card-title txt-center text-primary">
+          {{ res.ukm.nama | uppercase }}
+        </h4>
+        <div
+          class="alert alert-danger txt-center"
+          role="alert"
+          *ngIf="res.status"
+        >
+          Pendaftaran Sudah Tutup
+        </div>
+        <div
+          class="alert alert-warning txt-center"
+          role="alert"
+          *ngIf="!res.status"
+        >
+          <countdown
+            #cd
+            [config]="{ leftTime: res.leftTime }"
+            (event)="onTimerFinished($event)"
+          ></countdown>
+        </div>
+        <div class="row mt-3">
+          <div class="col-12 pr-3">
+            <img
+              [src]="res.ukm.imageLogoUrl"
+              class="mb-2 w-100 effect"
+              alt="image"
+            />
+          </div>
+        </div>
+        <br />
+        <div class="alert alert-info txt-center" role="alert">
+          Pendaftaran
+          <br />
+          {{ res.tanggalMulai | date: "MMM d, y" }} -
+          {{ res.tanggalSelesai | date: "MMM d, y" }}
+          <br />
+          {{ res.jamMulai }} s.d {{ res.jamSelesai }}
+        </div>
+        <button
+          type="button"
+          [disabled]="res.status"
+          class="btn btn-gradient-primary btn-lg btn-block"
+          routerLink="/form-pendaftaran/{{ res.ukm.id }}"
+        >
+          Daftar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<ngx-loading
+  [show]="loading"
+  [config]="{
+    animationType: ngxLoadingAnimationTypes.cubeGrid,
+    primaryColour: primaryColour,
+    secondaryColour: secondaryColour,
+    tertiaryColour: primaryColour,
+    backdropBorderRadius: '3px'
+  }"
+  [template]="loadingTemplate"
+></ngx-loading>

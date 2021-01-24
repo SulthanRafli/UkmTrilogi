@@ -1,0 +1,119 @@
+<div class="row">
+  <div class="col-md-12 stretch-card grid-margin">
+    <div class="card bg-gradient-primary card-img-holder text-white">
+      <div class="card-body">
+        <img
+          src="assets/images/dashboard/circle.svg"
+          class="card-img-absolute"
+          alt="circle-image"
+        />
+        <h2 class="font-weight-normal txt-center">Informasi Kegiatan UKM</h2>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-lg-12 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <div class="card-title">
+          <div class="row">
+            <div class="col-8"></div>
+            <div class="col-4">
+              <input
+                class="form-control filter"
+                (keyup)="applyFilter($event.target.value)"
+                placeholder="Filter"
+              />
+            </div>
+          </div>
+        </div>
+        <div class="table-responsive">
+          <mat-table [dataSource]="dataSource" matSort>
+            <ng-container matColumnDef="no">
+              <mat-header-cell
+                *matHeaderCellDef
+                mat-sort-header
+                class="text-center"
+              >
+                No
+              </mat-header-cell>
+              <mat-cell *matCellDef="let row; let i = index">
+                {{ i + 1 }}
+              </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="namaUkm">
+              <mat-header-cell
+                *matHeaderCellDef
+                mat-sort-header
+                class="text-center"
+              >
+                Nama UKM
+              </mat-header-cell>
+              <mat-cell *matCellDef="let row"> {{ row.namaUkm }} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="nama">
+              <mat-header-cell
+                *matHeaderCellDef
+                mat-sort-header
+                class="text-center"
+              >
+                Nama Kegiatan
+              </mat-header-cell>
+              <mat-cell *matCellDef="let row"> {{ row.nama }} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="deskripsi">
+              <mat-header-cell
+                *matHeaderCellDef
+                mat-sort-header
+                class="text-center"
+              >
+                Deskripsi
+              </mat-header-cell>
+              <mat-cell *matCellDef="let row"> {{ row.deskripsi }} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="tanggal">
+              <mat-header-cell
+                *matHeaderCellDef
+                mat-sort-header
+                class="text-center"
+              >
+                Tanggal
+              </mat-header-cell>
+              <mat-cell *matCellDef="let row">
+                {{ row.tanggal | date: "dd/MM/yyyy" }}
+              </mat-cell>
+            </ng-container>
+
+            <mat-header-row
+              *matHeaderRowDef="displayedColumns"
+            ></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns"> </mat-row>
+          </mat-table>
+
+          <div *ngIf="dataSource?.data.length === 0" class="no-data">
+            <p class="text-secondary">Data Tidak Ditemukan</p>
+          </div>
+
+          <ngx-loading
+            [show]="loading"
+            [config]="{
+              animationType: ngxLoadingAnimationTypes.cubeGrid,
+              primaryColour: primaryColour,
+              secondaryColour: secondaryColour,
+              tertiaryColour: primaryColour,
+              backdropBorderRadius: '3px'
+            }"
+            [template]="loadingTemplate"
+          ></ngx-loading>
+
+          <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

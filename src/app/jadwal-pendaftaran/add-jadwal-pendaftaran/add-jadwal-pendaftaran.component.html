@@ -1,0 +1,189 @@
+<div class="page-header">
+  <h3 class="page-title">Manage Jadwal Pendaftaran</h3>
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        <a routerLink="/jadwal-pendaftaran/manage-jadwal-pendaftaran"
+          >Jadwal Pendaftaran</a
+        >
+      </li>
+      <li class="breadcrumb-item active" aria-current="page">
+        Tambah Jadwal Pendaftaran
+      </li>
+    </ol>
+  </nav>
+</div>
+<div class="row">
+  <div class="col-12 grid-margin">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Form Jadwal Pendaftaran</h4>
+        <div [formGroup]="jadwalPendaftaranForm" class="form-sample">
+          <p class="card-description"></p>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Nama</label>
+                <div class="col-sm-9">
+                  <input
+                    type="text"
+                    [class.err-input]="
+                      !jadwalPendaftaranForm.controls.nama.valid &&
+                      (jadwalPendaftaranForm.controls.nama.dirty || isFormEmpty)
+                    "
+                    class="form-control"
+                    placeholder="Nama"
+                    formControlName="nama"
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Keterangan</label>
+                <div class="col-sm-9">
+                  <textarea
+                    class="form-control"
+                    [class.err-input]="
+                      !jadwalPendaftaranForm.controls.keterangan.valid &&
+                      (jadwalPendaftaranForm.controls.keterangan.dirty ||
+                        isFormEmpty)
+                    "
+                    placeholder="Keterangan"
+                    formControlName="keterangan"
+                  ></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Tanggal Mulai</label>
+                <div class="col-sm-9">
+                  <input
+                    [class.err-input]="
+                      !jadwalPendaftaranForm.controls.tanggalMulai.valid &&
+                      (jadwalPendaftaranForm.controls.tanggalMulai.dirty ||
+                        isFormEmpty)
+                    "
+                    type="date"
+                    class="form-control bg-white"
+                    [value]="
+                      jadwalPendaftaranForm.value.tanggalMulai
+                        | date: 'yyyy-MM-dd'
+                    "
+                    (click)="picker1.open()"
+                    readonly
+                  />
+                  <mat-form-field>
+                    <input
+                      matInput
+                      readonly
+                      formControlName="tanggalMulai"
+                      [matDatepicker]="picker1"
+                    />
+                    <mat-datepicker-toggle
+                      matSuffix
+                      [for]="picker1"
+                    ></mat-datepicker-toggle>
+                    <mat-datepicker touchUi #picker1></mat-datepicker>
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Tanggal Selesai</label>
+                <div class="col-sm-9">
+                  <input
+                    [class.err-input]="
+                      !jadwalPendaftaranForm.controls.tanggalSelesai.valid &&
+                      (jadwalPendaftaranForm.controls.tanggalSelesai.dirty ||
+                        isFormEmpty)
+                    "
+                    type="date"
+                    class="form-control bg-white"
+                    [value]="
+                      jadwalPendaftaranForm.value.tanggalSelesai
+                        | date: 'yyyy-MM-dd'
+                    "
+                    (click)="picker2.open()"
+                    readonly
+                  />
+                  <mat-form-field>
+                    <input
+                      matInput
+                      readonly
+                      formControlName="tanggalSelesai"
+                      [matDatepicker]="picker2"
+                    />
+                    <mat-datepicker-toggle
+                      matSuffix
+                      [for]="picker2"
+                    ></mat-datepicker-toggle>
+                    <mat-datepicker touchUi #picker2></mat-datepicker>
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Jam Mulai</label>
+                <div class="col-sm-9">
+                  <input
+                    type="time"
+                    [class.err-input]="
+                      !jadwalPendaftaranForm.controls.jamMulai.valid &&
+                      (jadwalPendaftaranForm.controls.jamMulai.dirty ||
+                        isFormEmpty)
+                    "
+                    class="form-control"
+                    placeholder="Jam Mulai"
+                    formControlName="jamMulai"
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Jam Selesai</label>
+                <div class="col-sm-9">
+                  <input
+                    type="time"
+                    [class.err-input]="
+                      !jadwalPendaftaranForm.controls.jamSelesai.valid &&
+                      (jadwalPendaftaranForm.controls.jamSelesai.dirty ||
+                        isFormEmpty)
+                    "
+                    class="form-control"
+                    placeholder="Jam Selesai"
+                    formControlName="jamSelesai"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-12 rght">
+              <button
+                class="btn btn-gradient-danger btn-md mr-2"
+                (click)="back()"
+              >
+                Batal</button
+              ><button
+                type="submit"
+                class="btn btn-gradient-success btn-md"
+                (click)="save()"
+              >
+                Simpan
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
