@@ -19,9 +19,7 @@ import { NavbarComponent } from './shared/navbar/navbar.component';
 import { SidebarComponent } from './shared/sidebar/sidebar.component';
 import { FooterComponent } from './shared/footer/footer.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { TodoComponent } from './apps/todo-list/todo/todo.component';
 import { SpinnerComponent } from './shared/spinner/spinner.component';
-import { TodoListComponent } from './apps/todo-list/todo-list.component';
 import { NavbarUserComponent } from './shared/navbar-user/navbar-user.component';
 import { HomeComponent } from './home/home.component';
 import { ProfileUkmComponent } from './profile-ukm/profile-ukm.component';
@@ -44,9 +42,7 @@ import { GuestLayoutComponent } from './layouts/guest-layout/guest-layout.compon
     NavbarComponent,
     SidebarComponent,
     FooterComponent,
-    DashboardComponent,
-    TodoListComponent,
-    TodoComponent,
+    DashboardComponent,    
     SpinnerComponent,
     ContentAnimateDirective,
     SaveLockButtonDirective,
