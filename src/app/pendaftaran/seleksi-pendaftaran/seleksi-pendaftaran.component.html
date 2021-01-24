@@ -162,13 +162,9 @@
           <ngx-loading
             [show]="loading"
             [config]="{
-              animationType: ngxLoadingAnimationTypes.cubeGrid,
-              primaryColour: primaryColour,
-              secondaryColour: secondaryColour,
-              tertiaryColour: primaryColour,
+              animationType: ngxLoadingAnimationTypes.cubeGrid,              
               backdropBorderRadius: '3px'
-            }"
-            [template]="loadingTemplate"
+            }"            
           ></ngx-loading>
 
           <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
