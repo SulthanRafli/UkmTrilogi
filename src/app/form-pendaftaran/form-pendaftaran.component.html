@@ -249,7 +249,47 @@
                 </div>
               </div>
             </div>
+            <div class="col-md-6">
+              <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Dokumen</label>
+                <div class="col-sm-9">
+                  <input
+                    type="file"
+                    #dokumen                    
+                    class="file-upload-default"
+                    (change)="uploadDokumen()"
+                  />
+                  <div class="input-group col-xs-12">
+                    <input
+                      type="text"
+                      [class.err-input]="
+                        !pendaftaranForm.controls.fileNameDokumen.valid &&
+                        (pendaftaranForm.controls.fileNameDokumen.dirty || isFormEmpty)
+                      "
+                      class="form-control file-upload-info"
+                      readonly
+                      formControlName="fileNameDokumen"
+                      placeholder="Upload Image"
+                    />
+                    <span class="input-group-append">
+                      <button
+                        class="file-upload-browse btn btn-gradient-primary"
+                        type="button"
+                        (click)="getDokumen()"
+                      >
+                        Upload
+                      </button>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
+          <div class="row" *ngIf="photoPreview">
+            <div class="col-md-6 txt-end">                           
+              <img [src]="photoPreview" alt="photo-img" />            
+            </div>
+          </div>          
           <br />
           <div class="row">
             <div class="col-md-6">

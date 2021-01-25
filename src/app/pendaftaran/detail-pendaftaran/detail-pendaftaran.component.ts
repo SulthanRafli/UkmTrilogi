@@ -72,6 +72,7 @@ export class DetailPendaftaranComponent implements OnInit {
     this.pendaftaranForm.get('fakultas').setValue(this.pendaftaran.fakultas);
     this.pendaftaranForm.get('alamat').setValue(this.pendaftaran.alamat);
     this.pendaftaranForm.get('fileName').setValue(this.pendaftaran.fileName);
+    this.pendaftaranForm.get('fileNameDokumen').setValue(this.pendaftaran.fileNameDokumen);
     this.pendaftaranForm.get('hobi').setValue(this.pendaftaran.hobi);
     this.pendaftaranForm.get('bakat').setValue(this.pendaftaran.bakat);
     this.pendaftaranForm.get('alasan').setValue(this.pendaftaran.alasan);
@@ -91,6 +92,7 @@ export class DetailPendaftaranComponent implements OnInit {
       fakultas: new FormControl({ value: null, disabled: true }),
       alamat: new FormControl({ value: null, disabled: true }),
       fileName: new FormControl({ value: null, disabled: true }),
+      fileNameDokumen: new FormControl({ value: null, disabled: true }),
       hobi: new FormControl({ value: null, disabled: true }),
       bakat: new FormControl({ value: null, disabled: true }),
       alasan: new FormControl({ value: null, disabled: true }),
@@ -110,5 +112,17 @@ export class DetailPendaftaranComponent implements OnInit {
     document.body.appendChild(link);
     link.click();
     link.remove();
+  }
+
+  downloadMyFileDokumen() {
+    if(this.pendaftaranForm.get('fileNameDokumen').value !== undefined){
+      const link = document.createElement('a');
+      link.setAttribute('target', '_blank');
+      link.setAttribute('href', this.pendaftaran.imageDokumenUrl);
+      link.setAttribute('download', this.pendaftaran.fileNameDokumen);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    }    
   }
 }
