@@ -7,6 +7,8 @@ import { Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { UkmService } from 'src/app/services/firebase/ukm.service';
 import { AngularFireAuth } from '@angular/fire/auth';
+import { AuthService } from 'src/app/services/auth/auth.service';
+import { Admin } from 'src/app/models/admin.model';
 
 @Component({
   selector: 'app-add-ukm',
@@ -19,11 +21,13 @@ export class AddUkmComponent implements OnInit {
   public isFormEmpty: boolean;
   public fileLogoPhoto: File;
   public fileStrukturPhoto: File;
+  public admin: Admin;
 
   @ViewChild('photoLogo') photoLogo: ElementRef;
   @ViewChild('photoStruktur') photoStruktur: ElementRef;
 
   constructor(
+    public authService: AuthService,
     public ukmService: UkmService,
     public angularFirestorage: AngularFireStorage,
     public angularFireAuth: AngularFireAuth,
@@ -33,6 +37,7 @@ export class AddUkmComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.admin = JSON.parse(localStorage.getItem('admin'));
     this.formValidation();
   }
 
@@ -149,6 +154,10 @@ export class AddUkmComponent implements OnInit {
                       }
 
                       this.ukmService.create(res.user.uid, data)
+                        .then(res => {
+                          this.angularFireAuth.signOut();
+                          this.authService.login(this.admin.email, this.admin.password);
+                        })
                         .catch(error => {
                           Swal.showValidationMessage(
                             `Request failed: ${error}`

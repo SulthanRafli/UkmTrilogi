@@ -7,6 +7,8 @@ import { Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { AdminService } from 'src/app/services/firebase/admin.service';
 import { AngularFireAuth } from '@angular/fire/auth';
+import { Admin } from 'src/app/models/admin.model';
+import { AuthService } from 'src/app/services/auth/auth.service';
 
 @Component({
   selector: 'app-add-admin',
@@ -18,10 +20,12 @@ export class AddAdminComponent implements OnInit {
   public adminForm: FormGroup;
   public isFormEmpty: boolean;
   public filePhoto: File;
+  public admin: Admin;
 
   @ViewChild('photo') photo: ElementRef;
 
   constructor(
+    public authService: AuthService,
     public adminService: AdminService,
     public angularFirestorage: AngularFireStorage,
     public angularFireAuth: AngularFireAuth,
@@ -31,6 +35,7 @@ export class AddAdminComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.admin = JSON.parse(localStorage.getItem('admin'));
     this.formValidation();
   }
 
@@ -112,6 +117,10 @@ export class AddAdminComponent implements OnInit {
                 }
 
                 this.adminService.create(res.user.uid, data)
+                  .then(res => {
+                    this.angularFireAuth.signOut();
+                    this.authService.login(this.admin.email, this.admin.password);
+                  })
                   .catch(error => {
                     Swal.showValidationMessage(
                       `Request failed: ${error}`
