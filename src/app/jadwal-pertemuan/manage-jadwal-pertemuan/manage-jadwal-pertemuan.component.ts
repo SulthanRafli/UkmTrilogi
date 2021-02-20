@@ -15,7 +15,7 @@ import Swal from 'sweetalert2';
 
 export class ManageJadwalPertemuanComponent implements OnInit {
 
-  public displayedColumns = ['no', 'nama', 'tanggalMulai', 'tanggalSelesai', 'jamMulai', 'jamSelesai', 'keterangan', 'aksi'];
+  public displayedColumns = ['no', 'nama', 'tanggal', 'jamMulai', 'jamSelesai', 'keterangan', 'aksi'];
   public length: number;
   public dataSource: MatTableDataSource<any>;
   public jadwalPertemuan: JadwalPertemuan[];
@@ -50,8 +50,7 @@ export class ManageJadwalPertemuanComponent implements OnInit {
           return {
             id: e.payload.doc.id,
             nama: e.payload.doc.data()['nama'],
-            tanggalMulai: e.payload.doc.data()['tanggalMulai'],
-            tanggalSelesai: e.payload.doc.data()['tanggalSelesai'],
+            tanggal: e.payload.doc.data()['tanggal'],            
             jamMulai: e.payload.doc.data()['jamMulai'],
             jamSelesai: e.payload.doc.data()['jamSelesai'],
             keterangan: e.payload.doc.data()['keterangan'],

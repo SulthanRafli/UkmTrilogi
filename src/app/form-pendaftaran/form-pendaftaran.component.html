@@ -11,12 +11,7 @@
                 <label class="col-sm-3 col-form-label">Nomor Pendaftaran</label>
                 <div class="col-sm-9">
                   <input
-                    type="text"
-                    [class.err-input]="
-                      !pendaftaranForm.controls.nomorPendaftaran.valid &&
-                      (pendaftaranForm.controls.nomorPendaftaran.dirty ||
-                        isFormEmpty)
-                    "
+                    type="text"               
                     class="form-control"
                     class="form-control"
                     placeholder="Nomor Pendaftaran"
@@ -379,10 +374,7 @@
                 <ng-container [formGroup]="item">
                   <td class="text-center">{{ i + 1 }}.</td>
                   <td class="text-center">
-                    <input
-                      [class.err-input]="
-                        !item.controls.kriteria.valid && (item.controls.kriteria.dirty || isFormEmpty == true)
-                      "
+                    <input                 
                       type="text"
                       class="form-control"
                       placeholder="Kriteria"

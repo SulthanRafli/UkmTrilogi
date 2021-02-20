@@ -42,8 +42,7 @@ export class UbahJadwalPertemuanComponent implements OnInit {
   formValidation(): void {
     this.jadwalPertemuanForm = this.formBuilder.group({
       nama: new FormControl(null, [Validators.required]),
-      tanggalMulai: new FormControl(null, [Validators.required]),
-      tanggalSelesai: new FormControl(null, [Validators.required]),
+      tanggal: new FormControl(null, [Validators.required]),      
       jamMulai: new FormControl(null, [Validators.required]),
       jamSelesai: new FormControl(null, [Validators.required]),
       keterangan: new FormControl(null, [Validators.required])
@@ -69,8 +68,7 @@ export class UbahJadwalPertemuanComponent implements OnInit {
 
   fillData(): void {
     this.jadwalPertemuanForm.get('nama').setValue(this.jadwalPertemuan.nama);
-    this.jadwalPertemuanForm.get('tanggalMulai').setValue(this.jadwalPertemuan.tanggalMulai);
-    this.jadwalPertemuanForm.get('tanggalSelesai').setValue(this.jadwalPertemuan.tanggalSelesai);
+    this.jadwalPertemuanForm.get('tanggal').setValue(this.jadwalPertemuan.tanggal);    
     this.jadwalPertemuanForm.get('jamMulai').setValue(this.jadwalPertemuan.jamMulai);
     this.jadwalPertemuanForm.get('jamSelesai').setValue(this.jadwalPertemuan.jamSelesai);
     this.jadwalPertemuanForm.get('keterangan').setValue(this.jadwalPertemuan.keterangan);
@@ -92,8 +90,7 @@ export class UbahJadwalPertemuanComponent implements OnInit {
 
       const data = {
         nama: this.jadwalPertemuanForm.get('nama').value,
-        tanggalMulai: moment(this.jadwalPertemuanForm.get('tanggalMulai').value).format('YYYY-MM-DD'),
-        tanggalSelesai: moment(this.jadwalPertemuanForm.get('tanggalSelesai').value).format('YYYY-MM-DD'),
+        tanggal: moment(this.jadwalPertemuanForm.get('tanggal').value).format('YYYY-MM-DD'),        
         jamMulai: this.jadwalPertemuanForm.get('jamMulai').value,
         jamSelesai: this.jadwalPertemuanForm.get('jamSelesai').value,
         keterangan: this.jadwalPertemuanForm.get('keterangan').value,

@@ -33,8 +33,7 @@ export class AddJadwalPertemuanComponent implements OnInit {
   formValidation(): void {
     this.jadwalPertemuanForm = this.formBuilder.group({
       nama: new FormControl(null, [Validators.required]),
-      tanggalMulai: new FormControl(null, [Validators.required]),
-      tanggalSelesai: new FormControl(null, [Validators.required]),
+      tanggal: new FormControl(null, [Validators.required]),      
       jamMulai: new FormControl(null, [Validators.required]),
       jamSelesai: new FormControl(null, [Validators.required]),
       keterangan: new FormControl(null, [Validators.required])
@@ -59,8 +58,7 @@ export class AddJadwalPertemuanComponent implements OnInit {
         idUkm: this.ukm.id,
         namaUkm: this.ukm.nama,
         nama: this.jadwalPertemuanForm.get('nama').value,
-        tanggalMulai: moment(this.jadwalPertemuanForm.get('tanggalMulai').value).format('YYYY-MM-DD'),
-        tanggalSelesai: moment(this.jadwalPertemuanForm.get('tanggalSelesai').value).format('YYYY-MM-DD'),
+        tanggal: moment(this.jadwalPertemuanForm.get('tanggal').value).format('YYYY-MM-DD'),        
         jamMulai: this.jadwalPertemuanForm.get('jamMulai').value,
         jamSelesai: this.jadwalPertemuanForm.get('jamSelesai').value,
         keterangan: this.jadwalPertemuanForm.get('keterangan').value,

@@ -9,8 +9,14 @@
         />
         <h2 class="font-weight-normal txt-center">Detail Pengumuman</h2>
         <div class="txt-center">
-          <button type="button" class="btn btn-link btn-sm" routerLink="/pengumuman/list-pengumuman">Kembali</button>
-        </div>        
+          <button
+            type="button"
+            class="btn btn-link btn-sm"
+            routerLink="/pengumuman/list-pengumuman"
+          >
+            Kembali
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -131,6 +137,13 @@
                   Diterima
                 </div>
                 <div
+                  class="badge badge-info badge-pill mrg-lft-5"
+                  (click)="openModal()"
+                  *ngIf="row.status == 'settle' && jadwalPertemuan?.length !== 0"
+                >
+                  Jadwal
+                </div>
+                <div
                   class="badge badge-danger badge-pill"
                   *ngIf="row.status == 'cancel'"
                 >
@@ -152,9 +165,9 @@
           <ngx-loading
             [show]="loading"
             [config]="{
-              animationType: ngxLoadingAnimationTypes.cubeGrid,              
+              animationType: ngxLoadingAnimationTypes.cubeGrid,
               backdropBorderRadius: '3px'
-            }"            
+            }"
           ></ngx-loading>
 
           <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
@@ -163,3 +176,36 @@
     </div>
   </div>
 </div>
+<ng-template
+  #infoJadwal
+  let-modal
+  class="modal fade"
+  id="exampleModal-2"
+  aria-labelledby="exampleModalLabel-2"
+>
+  <div class="modal-content">
+    <div class="modal-header">
+      <h5 class="modal-title" id="exampleModalLabel-2">Jadwal Pertemuan</h5>
+      <button
+        type="button"
+        class="close"
+        (click)="modal.dismiss()"
+        aria-label="Close"
+      >
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <p>
+        <span class="font-weight-bold">{{ nama }}</span> akan berlangsung
+        tanggal <span class="font-weight-bold">{{ tanggal }}</span> jam
+        <span class="font-weight-bold"
+          >{{ jamMulai }} s.d. {{ jamSelesai }}</span
+        >
+      </p>
+      <div class="alert alert-warning txt-justify" role="alert">
+        Note : {{ keterangan }}
+      </div>
+    </div>
+  </div>
+</ng-template>

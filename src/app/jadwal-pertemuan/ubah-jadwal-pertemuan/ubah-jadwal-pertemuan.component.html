@@ -59,18 +59,18 @@
           <div class="row">
             <div class="col-md-6">
               <div class="form-group row">
-                <label class="col-sm-3 col-form-label">Tanggal Mulai</label>
+                <label class="col-sm-3 col-form-label">Tanggal</label>
                 <div class="col-sm-9">
                   <input
                     [class.err-input]="
-                      !jadwalPertemuanForm.controls.tanggalMulai.valid &&
-                      (jadwalPertemuanForm.controls.tanggalMulai.dirty ||
+                      !jadwalPertemuanForm.controls.tanggal.valid &&
+                      (jadwalPertemuanForm.controls.tanggal.dirty ||
                         isFormEmpty)
                     "
                     type="date"
                     class="form-control bg-white"
                     [value]="
-                      jadwalPertemuanForm.value.tanggalMulai
+                      jadwalPertemuanForm.value.tanggal
                         | date: 'yyyy-MM-dd'
                     "
                     (click)="picker1.open()"
@@ -80,7 +80,7 @@
                     <input
                       matInput
                       readonly
-                      formControlName="tanggalMulai"
+                      formControlName="tanggal"
                       [matDatepicker]="picker1"
                     />
                     <mat-datepicker-toggle
@@ -92,42 +92,7 @@
                 </div>
               </div>
             </div>
-            <div class="col-md-6">
-              <div class="form-group row">
-                <label class="col-sm-3 col-form-label">Tanggal Selesai</label>
-                <div class="col-sm-9">
-                  <input
-                    [class.err-input]="
-                      !jadwalPertemuanForm.controls.tanggalSelesai.valid &&
-                      (jadwalPertemuanForm.controls.tanggalSelesai.dirty ||
-                        isFormEmpty)
-                    "
-                    type="date"
-                    class="form-control bg-white"
-                    [value]="
-                      jadwalPertemuanForm.value.tanggalSelesai
-                        | date: 'yyyy-MM-dd'
-                    "
-                    (click)="picker2.open()"
-                    readonly
-                  />
-                  <mat-form-field>
-                    <input
-                      matInput
-                      readonly
-                      formControlName="tanggalSelesai"
-                      [matDatepicker]="picker2"
-                    />
-                    <mat-datepicker-toggle
-                      matSuffix
-                      [for]="picker2"
-                    ></mat-datepicker-toggle>
-                    <mat-datepicker touchUi #picker2></mat-datepicker>
-                  </mat-form-field>
-                </div>
-              </div>
-            </div>
-          </div>
+          </div>            
           <div class="row">
             <div class="col-md-6">
               <div class="form-group row">

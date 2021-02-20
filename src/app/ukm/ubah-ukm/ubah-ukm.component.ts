@@ -170,7 +170,7 @@ export class UbahUkmComponent implements OnInit {
     this.loading = true;
     this.kriteriaService.getAll(this.key).pipe(
     ).subscribe(
-      (data) => {        
+      (data) => {
         this.kriteria = data.map(e => {
           return {
             id: e.payload.doc.id,
@@ -260,29 +260,30 @@ export class UbahUkmComponent implements OnInit {
                           this.kriteriaService.delete(val.id);
                         })
 
-                        let tempKriteria = [];
+                      }
 
-                        for (let i = 0; i < this.countItem; i++) {
-                          let dataForm = (<FormArray>this.ukmForm.controls['items']).at(i);
+                      let tempKriteria = [];
 
-                          let tempData = {
-                            idUkm: this.key,
-                            kriteria: dataForm.get('kriteria').value,
-                            dateMake: new Date().getTime()
-                          }
+                      for (let i = 0; i < this.countItem; i++) {
+                        let dataForm = (<FormArray>this.ukmForm.controls['items']).at(i);
 
-                          tempKriteria.push(tempData);
+                        let tempData = {
+                          idUkm: this.key,
+                          kriteria: dataForm.get('kriteria').value,
+                          dateMake: new Date().getTime()
                         }
 
-                        tempKriteria.map(val => {
-                          this.kriteriaService.create(val)
-                            .catch(error => {
-                              Swal.showValidationMessage(
-                                `Request failed: ${error}`
-                              )
-                            });
-                        })
+                        tempKriteria.push(tempData);
                       }
+
+                      tempKriteria.map(val => {
+                        this.kriteriaService.create(val)
+                          .catch(error => {
+                            Swal.showValidationMessage(
+                              `Request failed: ${error}`
+                            )
+                          });
+                      })
                     })
                   })
                 ).subscribe()
@@ -315,30 +316,31 @@ export class UbahUkmComponent implements OnInit {
                   this.kriteria.map(val => {
                     this.kriteriaService.delete(val.id);
                   })
+                }
 
-                  let tempKriteria = [];
+                let tempKriteria = [];
 
-                  for (let i = 0; i < this.countItem; i++) {
-                    let dataForm = (<FormArray>this.ukmForm.controls['items']).at(i);
+                for (let i = 0; i < this.countItem; i++) {
+                  let dataForm = (<FormArray>this.ukmForm.controls['items']).at(i);
 
-                    let tempData = {
-                      idUkm: this.key,
-                      kriteria: dataForm.get('kriteria').value,
-                      dateMake: new Date().getTime()
-                    }
-
-                    tempKriteria.push(tempData);
+                  let tempData = {
+                    idUkm: this.key,
+                    kriteria: dataForm.get('kriteria').value,
+                    dateMake: new Date().getTime()
                   }
 
-                  tempKriteria.map(val => {
-                    this.kriteriaService.create(val)
-                      .catch(error => {
-                        Swal.showValidationMessage(
-                          `Request failed: ${error}`
-                        )
-                      });
-                  })
+                  tempKriteria.push(tempData);
                 }
+
+                tempKriteria.map(val => {
+                  this.kriteriaService.create(val)
+                    .catch(error => {
+                      Swal.showValidationMessage(
+                        `Request failed: ${error}`
+                      )
+                    });
+                })
+
               })
             })
           ).subscribe()
@@ -367,30 +369,30 @@ export class UbahUkmComponent implements OnInit {
                   this.kriteria.map(val => {
                     this.kriteriaService.delete(val.id);
                   })
+                }
+                let tempKriteria = [];
 
-                  let tempKriteria = [];
+                for (let i = 0; i < this.countItem; i++) {
+                  let dataForm = (<FormArray>this.ukmForm.controls['items']).at(i);
 
-                  for (let i = 0; i < this.countItem; i++) {
-                    let dataForm = (<FormArray>this.ukmForm.controls['items']).at(i);
-
-                    let tempData = {
-                      idUkm: this.key,
-                      kriteria: dataForm.get('kriteria').value,
-                      dateMake: new Date().getTime()
-                    }
-
-                    tempKriteria.push(tempData);
+                  let tempData = {
+                    idUkm: this.key,
+                    kriteria: dataForm.get('kriteria').value,
+                    dateMake: new Date().getTime()
                   }
 
-                  tempKriteria.map(val => {
-                    this.kriteriaService.create(val)
-                      .catch(error => {
-                        Swal.showValidationMessage(
-                          `Request failed: ${error}`
-                        )
-                      });
-                  })
+                  tempKriteria.push(tempData);
                 }
+
+                tempKriteria.map(val => {
+                  this.kriteriaService.create(val)
+                    .catch(error => {
+                      Swal.showValidationMessage(
+                        `Request failed: ${error}`
+                      )
+                    });
+                })
+
               })
             })
           ).subscribe()
@@ -407,30 +409,30 @@ export class UbahUkmComponent implements OnInit {
             this.kriteria.map(val => {
               this.kriteriaService.delete(val.id);
             })
+          }
+          let tempKriteria = [];
 
-            let tempKriteria = [];
+          for (let i = 0; i < this.countItem; i++) {
+            let dataForm = (<FormArray>this.ukmForm.controls['items']).at(i);
 
-            for (let i = 0; i < this.countItem; i++) {
-              let dataForm = (<FormArray>this.ukmForm.controls['items']).at(i);
-
-              let tempData = {
-                idUkm: this.key,
-                kriteria: dataForm.get('kriteria').value,
-                dateMake: new Date().getTime()
-              }
-
-              tempKriteria.push(tempData);
+            let tempData = {
+              idUkm: this.key,
+              kriteria: dataForm.get('kriteria').value,
+              dateMake: new Date().getTime()
             }
 
-            tempKriteria.map(val => {
-              this.kriteriaService.create(val)
-                .catch(error => {
-                  Swal.showValidationMessage(
-                    `Request failed: ${error}`
-                  )
-                });
-            })
+            tempKriteria.push(tempData);
           }
+
+          tempKriteria.map(val => {
+            this.kriteriaService.create(val)
+              .catch(error => {
+                Swal.showValidationMessage(
+                  `Request failed: ${error}`
+                )
+              });
+          })
+
 
           return this.ukmService.update(this.key, data)
             .catch(error => {

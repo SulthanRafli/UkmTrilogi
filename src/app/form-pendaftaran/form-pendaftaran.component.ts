@@ -107,7 +107,7 @@ export class FormPendaftaranComponent implements OnInit {
     });
 
     this.t.push(this.formBuilder.group({
-      kriteria: ['', [Validators.required]],
+      kriteria: [''],
       jawaban: [''],
     }));
 
@@ -127,7 +127,7 @@ export class FormPendaftaranComponent implements OnInit {
           this.t.clear();
           for (let i = 0; i < data.length; i++) {
             this.t.push(this.formBuilder.group({
-              kriteria: [data[i].payload.doc.data()['kriteria'], [Validators.required]],
+              kriteria: [{ value: data[i].payload.doc.data()['kriteria'], disabled: true }],
               jawaban: [''],
             }));
           }

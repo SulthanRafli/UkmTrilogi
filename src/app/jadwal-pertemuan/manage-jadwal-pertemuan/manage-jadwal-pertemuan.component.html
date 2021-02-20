@@ -65,31 +65,18 @@
             <mat-cell *matCellDef="let row"> {{ row.nama }} </mat-cell>
           </ng-container>
 
-          <ng-container matColumnDef="tanggalMulai">
+          <ng-container matColumnDef="tanggal">
             <mat-header-cell
               *matHeaderCellDef
               mat-sort-header
               class="text-center"
             >
-              Tanggal Mulai
+              Tanggal
             </mat-header-cell>
             <mat-cell *matCellDef="let row">
-              {{ row.tanggalMulai | date: "dd/MM/yyyy" }}
+              {{ row.tanggal | date: "dd/MM/yyyy" }}
             </mat-cell>
-          </ng-container>
-
-          <ng-container matColumnDef="tanggalSelesai">
-            <mat-header-cell
-              *matHeaderCellDef
-              mat-sort-header
-              class="text-center"
-            >
-              Tanggal Selesai
-            </mat-header-cell>
-            <mat-cell *matCellDef="let row">
-              {{ row.tanggalSelesai | date: "dd/MM/yyyy" }}
-            </mat-cell>
-          </ng-container>
+          </ng-container>          
 
           <ng-container matColumnDef="jamMulai">
             <mat-header-cell

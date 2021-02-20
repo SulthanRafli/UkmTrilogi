@@ -29,6 +29,10 @@ export class JadwalPertemuanService {
         return this.angularFirestore.collection('JadwalPertemuan', ref => ref.where('idUkm', '==', JSON.parse(localStorage.getItem('ukm')).id).orderBy('dateMake', 'desc')).snapshotChanges();
     }
 
+    getAllByUkm(idUkm) {
+        return this.angularFirestore.collection('JadwalPertemuan', ref => ref.where('idUkm', '==', idUkm).orderBy('dateMake', 'desc')).snapshotChanges();
+    }
+
     getAllForUsers() {
         return this.angularFirestore.collection('JadwalPertemuan', ref => ref.orderBy('dateMake', 'desc')).snapshotChanges();
     }
