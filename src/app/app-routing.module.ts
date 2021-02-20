@@ -86,6 +86,11 @@ const routes: Routes = [
         loadChildren: () => import('./jadwal-pendaftaran/jadwal-pendaftaran.module').then(m => m.JadwalPendaftaranModule)
       },
       {
+        path: 'jadwal-pertemuan',
+        canActivate: [AdminUkmGuard],
+        loadChildren: () => import('./jadwal-pertemuan/jadwal-pertemuan.module').then(m => m.JadwalPertemuanModule)
+      },
+      {
         path: 'berita',
         canActivate: [AdminUkmGuard],
         loadChildren: () => import('./berita/berita.module').then(m => m.BeritaModule)

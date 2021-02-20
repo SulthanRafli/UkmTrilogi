@@ -2,27 +2,23 @@ import { OnInit, Component, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
-import { Subject } from 'rxjs';
-import { Ukm } from 'src/app/models/ukm.model';
-import { UkmService } from 'src/app/services/firebase/ukm.service';
+import { JadwalPertemuan } from 'src/app/models/jadwal-pertemuan.model';
+import { JadwalPertemuanService } from 'src/app/services/firebase/jadwal-pertemuan.service';
 import { ngxLoadingAnimationTypes } from 'ngx-loading'
 import Swal from 'sweetalert2';
-import { AuthService } from 'src/app/services/auth/auth.service';
 
 @Component({
-  selector: 'app-manage-ukm',
-  templateUrl: './manage-ukm.component.html',
-  styleUrls: ['./manage-ukm.component.scss']
+  selector: 'app-manage-jadwal-pertemuan',
+  templateUrl: './manage-jadwal-pertemuan.component.html',
+  styleUrls: ['./manage-jadwal-pertemuan.component.scss']
 })
 
-export class ManageUkmComponent implements OnInit {
+export class ManageJadwalPertemuanComponent implements OnInit {
 
-  public unsubscribe$ = new Subject<void>();
-
-  public displayedColumns = ['no', 'logo', 'nama', 'email', 'telp', 'aksi'];
+  public displayedColumns = ['no', 'nama', 'tanggalMulai', 'tanggalSelesai', 'jamMulai', 'jamSelesai', 'keterangan', 'aksi'];
   public length: number;
   public dataSource: MatTableDataSource<any>;
-  public ukm: Ukm[];
+  public jadwalPertemuan: JadwalPertemuan[];
   public loading: boolean;
 
   public ngxLoadingAnimationTypes = ngxLoadingAnimationTypes;
@@ -31,13 +27,12 @@ export class ManageUkmComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
 
   constructor(
-    public authService: AuthService,
     public changeDetectorRef: ChangeDetectorRef,
-    public ukmService: UkmService,
+    public jadwalPertemuanService: JadwalPertemuanService,
   ) { }
 
   ngOnInit(): void {
-    this.getAllUkm();
+    this.getAllJadwalPertemuan();
   }
 
   applyFilter(filterValue: string) {
@@ -46,30 +41,26 @@ export class ManageUkmComponent implements OnInit {
     this.dataSource.filter = filterValue;
   }
 
-  getAllUkm(): void {
+  getAllJadwalPertemuan(): void {
     this.loading = true;
-    this.ukmService.getAll().pipe(
+    this.jadwalPertemuanService.getAll().pipe(
     ).subscribe(
       (data) => {
-        this.ukm = data.map(e => {
+        this.jadwalPertemuan = data.map(e => {
           return {
             id: e.payload.doc.id,
             nama: e.payload.doc.data()['nama'],
-            email: e.payload.doc.data()['email'],
-            password: e.payload.doc.data()['password'],
-            telp: e.payload.doc.data()['telp'],
-            deskripsi: e.payload.doc.data()['deskripsi'],
-            alamat: e.payload.doc.data()['alamat'],
-            fileLogoName: e.payload.doc.data()['fileLogoName'],
-            imageLogoUrl: e.payload.doc.data()['imageLogoUrl'],
-            fileStrukturName: e.payload.doc.data()['fileStrukturName'],
-            imageStrukturUrl: e.payload.doc.data()['imageStrukturUrl'],
+            tanggalMulai: e.payload.doc.data()['tanggalMulai'],
+            tanggalSelesai: e.payload.doc.data()['tanggalSelesai'],
+            jamMulai: e.payload.doc.data()['jamMulai'],
+            jamSelesai: e.payload.doc.data()['jamSelesai'],
+            keterangan: e.payload.doc.data()['keterangan'],
           }
         });
-        this.dataSource = new MatTableDataSource(this.ukm);
+        this.dataSource = new MatTableDataSource(this.jadwalPertemuan);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
-        this.length = this.ukm.length;
+        this.length = this.jadwalPertemuan.length;
         this.changeDetectorRef.detectChanges();
         this.loading = false;
       },
@@ -77,7 +68,7 @@ export class ManageUkmComponent implements OnInit {
     );
   }
 
-  delete(ukm) {
+  delete(key) {
     Swal.fire({
       title: "Anda sudah yakin melakukan penghapusan data ?",
       text: "Data yang sudah dihapus tidak dapat dikembalikan",
@@ -90,7 +81,7 @@ export class ManageUkmComponent implements OnInit {
       reverseButtons: true,
       showLoaderOnConfirm: true,
       preConfirm: () => {
-        return this.ukmService.delete(ukm.id)          
+        return this.jadwalPertemuanService.delete(key)
           .catch(error => {
             Swal.showValidationMessage(
               `Request failed: ${error}`
@@ -106,7 +97,7 @@ export class ManageUkmComponent implements OnInit {
           confirmButtonColor: '#07cdae',
         }).then((result) => {
           if (result.value) {
-            this.getAllUkm();
+            this.getAllJadwalPertemuan();
           }
         });
       }

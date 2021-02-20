@@ -121,6 +121,60 @@
                 </div>
               </div>
             </div>
+            <div class="col-md-6">
+              <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Nama Divisi</label>
+                <div class="col-sm-9">
+                  <input
+                    type="text"
+                    [class.err-input]="
+                      !kegiatanForm.controls.namaDivisi.valid &&
+                      (kegiatanForm.controls.namaDivisi.dirty || isFormEmpty)
+                    "
+                    class="form-control"
+                    placeholder="Nama Divisi"
+                    formControlName="namaDivisi"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group row">
+                <label class="col-sm-3 col-form-label">File</label>
+                <div class="col-sm-9">
+                  <input
+                    type="file"
+                    #file
+                    class="file-upload-default"
+                    (change)="uploadFile()"
+                  />
+                  <div class="input-group col-xs-12">
+                    <input
+                      type="text"
+                      [class.err-input]="
+                        !kegiatanForm.controls.fileName.valid &&
+                        (kegiatanForm.controls.fileName.dirty || isFormEmpty)
+                      "
+                      class="form-control file-upload-info"
+                      disabled
+                      formControlName="fileName"
+                      placeholder="Upload File"
+                    />
+                    <span class="input-group-append">
+                      <button
+                        class="file-upload-browse btn btn-gradient-primary"
+                        type="button"
+                        (click)="getFile()"
+                      >
+                        Upload
+                      </button>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
           <div class="row">
             <div class="col-lg-12 rght">
@@ -128,7 +182,7 @@
                 class="btn btn-gradient-danger btn-md mr-2"
                 (click)="back()"
               >
-              Kembali</button
+                Kembali</button
               ><button
                 type="submit"
                 class="btn btn-gradient-success btn-md"

@@ -1,7 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { AngularFireStorage } from '@angular/fire/storage';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { finalize } from 'rxjs/operators';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { finalize, mergeMap } from 'rxjs/operators';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
@@ -9,6 +9,8 @@ import { UkmService } from 'src/app/services/firebase/ukm.service';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { Admin } from 'src/app/models/admin.model';
+import { KriteriaService } from 'src/app/services/firebase/kriteria.service';
+import { from } from 'rxjs';
 
 @Component({
   selector: 'app-add-ukm',
@@ -22,6 +24,7 @@ export class AddUkmComponent implements OnInit {
   public fileLogoPhoto: File;
   public fileStrukturPhoto: File;
   public admin: Admin;
+  private countItem: number = 1;
 
   @ViewChild('photoLogo') photoLogo: ElementRef;
   @ViewChild('photoStruktur') photoStruktur: ElementRef;
@@ -29,6 +32,7 @@ export class AddUkmComponent implements OnInit {
   constructor(
     public authService: AuthService,
     public ukmService: UkmService,
+    public kriteriaService: KriteriaService,
     public angularFirestorage: AngularFireStorage,
     public angularFireAuth: AngularFireAuth,
     public formBuilder: FormBuilder,
@@ -51,8 +55,18 @@ export class AddUkmComponent implements OnInit {
       fileStrukturName: new FormControl(null, [Validators.required]),
       email: new FormControl(null, [Validators.required, Validators.email]),
       password: new FormControl(null, [Validators.required, Validators.minLength(6)]),
+      items: new FormArray([])
     });
+
+    this.t.push(this.formBuilder.group({
+      kriteria: ['', [Validators.required]],
+    }));
+
+    this.ukmForm.get('items');
   }
+
+  get f() { return this.ukmForm.controls; }
+  get t() { return this.f.items as FormArray; }
 
   getPhotoLogo() {
     if (this.photoLogo == null) {
@@ -88,6 +102,23 @@ export class AddUkmComponent implements OnInit {
       this.ukmForm.get('fileStrukturName').setValue(fileList[0].name);
       this.fileStrukturPhoto = fileList[0];
     }
+  }
+
+  addControl() {
+    this.countItem++;
+
+    if (this.t.length < this.countItem) {
+      for (let i = this.t.length; i < this.countItem; i++) {
+        this.t.push(this.formBuilder.group({
+          kriteria: ['', Validators.required],
+        }));
+      }
+    }
+  }
+
+  removeControl(index: number): void {
+    this.countItem--;
+    this.t.removeAt(index);
   }
 
   back(): void {
@@ -131,14 +162,13 @@ export class AddUkmComponent implements OnInit {
       reverseButtons: true,
       showLoaderOnConfirm: true,
       preConfirm: () => {
-        return this.angularFireAuth.createUserWithEmailAndPassword(this.ukmForm.get('email').value, this.ukmForm.get('password').value).then(res => {
-          uploadTaskLogo.snapshotChanges().pipe(
-            finalize(() => {
-              fileRefLogo.getDownloadURL().subscribe(urlLogo => {
-                uploadTaskStruktur.snapshotChanges().pipe(
-                  finalize(() => {
-                    fileRefStruktur.getDownloadURL().subscribe(urlStruktur => {
-
+        uploadTaskLogo.snapshotChanges().pipe(
+          finalize(() => {
+            fileRefLogo.getDownloadURL().subscribe(urlLogo => {
+              uploadTaskStruktur.snapshotChanges().pipe(
+                finalize(() => {
+                  fileRefStruktur.getDownloadURL().subscribe(urlStruktur => {
+                    this.angularFireAuth.createUserWithEmailAndPassword(this.ukmForm.get('email').value, this.ukmForm.get('password').value).then(res => {
                       const data = {
                         nama: this.ukmForm.get('nama').value,
                         deskripsi: this.ukmForm.get('deskripsi').value,
@@ -154,28 +184,47 @@ export class AddUkmComponent implements OnInit {
                       }
 
                       this.ukmService.create(res.user.uid, data)
-                        .then(res => {
-                          this.angularFireAuth.signOut();
-                          this.authService.login(this.admin.email, this.admin.password);
-                        })
                         .catch(error => {
                           Swal.showValidationMessage(
                             `Request failed: ${error}`
                           )
                         });
+
+                      let tempKriteria = [];
+
+                      for (let i = 0; i < this.countItem; i++) {
+                        let dataForm = (<FormArray>this.ukmForm.controls['items']).at(i);
+
+                        let tempData = {
+                          idUkm: res.user.uid,
+                          kriteria: dataForm.get('kriteria').value,
+                          dateMake: new Date().getTime()
+                        }
+
+                        tempKriteria.push(tempData);
+                      }
+
+                      tempKriteria.map(val => {
+                        this.kriteriaService.create(val)
+                          .catch(error => {
+                            Swal.showValidationMessage(
+                              `Request failed: ${error}`
+                            )
+                          });
+                      })
+                    }).catch(err => {
+                      Swal.showValidationMessage(
+                        `Request failed: ${err}`
+                      )
                     })
                   })
-                ).subscribe()
-                return uploadTaskStruktur.percentageChanges();
-              })
+                })
+              ).subscribe()
+              return uploadTaskStruktur.percentageChanges();
             })
-          ).subscribe()
-          return uploadTaskLogo.percentageChanges();
-        }).catch(err => {
-          Swal.showValidationMessage(
-            `Request failed: ${err}`
-          )
-        })
+          })
+        ).subscribe()
+        return uploadTaskLogo.percentageChanges();
       },
       allowOutsideClick: () => !Swal.isLoading()
     }).then((result) => {

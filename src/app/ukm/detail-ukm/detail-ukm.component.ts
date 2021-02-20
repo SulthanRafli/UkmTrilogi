@@ -14,6 +14,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { ngxLoadingAnimationTypes } from 'ngx-loading';
+import { Kriteria } from 'src/app/models/kriteria.model';
 
 @Component({
   selector: 'app-detail-ukm',
@@ -25,6 +26,7 @@ export class DetailUkmComponent implements OnInit {
   public key: string;
   public unsubscribe$ = new Subject<void>();
   public ukm: Ukm;
+  public kriteria: Kriteria[];
 
   public displayedColumnsAnggota = ['no', 'foto', 'nama', 'jenisKelamin', 'jurusan', 'fakultas'];
   public lengthAnggota: number;
@@ -75,14 +77,16 @@ export class DetailUkmComponent implements OnInit {
       this.angularFirestore.collection<Anggota>('Anggota', ref => ref.where('idUkm', '==', this.key).orderBy('dateMake', 'desc')).valueChanges(),
       this.angularFirestore.collection<Kegiatan>('Kegiatan', ref => ref.where('idUkm', '==', this.key).orderBy('dateMake', 'desc')).valueChanges(),
       this.angularFirestore.collection<Lpj>('Lpj', ref => ref.where('idUkm', '==', this.key).orderBy('dateMake', 'desc')).valueChanges(),
-      this.angularFirestore.collection<Proker>('Proker', ref => ref.where('idUkm', '==', this.key).orderBy('dateMake', 'desc')).valueChanges()
+      this.angularFirestore.collection<Proker>('Proker', ref => ref.where('idUkm', '==', this.key).orderBy('dateMake', 'desc')).valueChanges(),
+      this.angularFirestore.collection<Kriteria>('Kriteria', ref => ref.where('idUkm', '==', this.key).orderBy('dateMake', 'desc')).valueChanges()
+
     ).pipe(
       catchError(error => {
         console.log(error);
         return throwError(error);
       }),
-      map(([ukm, anggota, kegiatan, lpj, proker]) => {
-        return { ukm, anggota, kegiatan, lpj, proker };
+      map(([ukm, anggota, kegiatan, lpj, proker, kriteria]) => {
+        return { ukm, anggota, kegiatan, lpj, proker, kriteria };
       })
     ).subscribe((data) => {
       this.ukm = data.ukm;
@@ -106,6 +110,8 @@ export class DetailUkmComponent implements OnInit {
       this.dataSourceProker.paginator = this.paginatorProker;
       this.dataSourceProker.sort = this.sortProker;
       this.lengthProker = data.proker.length;
+
+      this.kriteria = data.kriteria;
 
       this.loading = false;
 

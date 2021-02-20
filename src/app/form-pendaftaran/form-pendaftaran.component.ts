@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { AngularFireStorage } from '@angular/fire/storage';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { finalize, take, takeUntil } from 'rxjs/operators';
 import Swal from 'sweetalert2';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -11,6 +11,8 @@ import { ngxLoadingAnimationTypes } from 'ngx-loading';
 import { Subject } from 'rxjs';
 import { Ukm } from '../models/ukm.model';
 import { UkmService } from '../services/firebase/ukm.service';
+import { KriteriaService } from '../services/firebase/kriteria.service';
+import { JawabanKriteriaService } from '../services/firebase/jawaban-kriteria.service';
 
 @Component({
   selector: 'app-form-pendaftaran',
@@ -28,6 +30,7 @@ export class FormPendaftaranComponent implements OnInit {
   public key: string;
   public ukm: Ukm;
   public photoPreview: any;
+  private countItem: number = 1;
 
   public ngxLoadingAnimationTypes = ngxLoadingAnimationTypes;
 
@@ -37,6 +40,8 @@ export class FormPendaftaranComponent implements OnInit {
   constructor(
     public activatedRoute: ActivatedRoute,
     public pendaftaranService: PendaftaranService,
+    public kriteriaService: KriteriaService,
+    public jawabanKriteriaService: JawabanKriteriaService,
     public ukmService: UkmService,
     public angularFirestorage: AngularFireStorage,
     public formBuilder: FormBuilder,
@@ -49,6 +54,7 @@ export class FormPendaftaranComponent implements OnInit {
     this.formValidation();
     this.getNomorPendaftaran();
     this.getUkm();
+    this.getAllKriteria();
   }
 
   getNomorPendaftaran(): void {
@@ -97,7 +103,40 @@ export class FormPendaftaranComponent implements OnInit {
       bakat: new FormControl(null, [Validators.required]),
       alasan: new FormControl(null, [Validators.required]),
       tanya: new FormControl(null, [Validators.required]),
+      items: new FormArray([])
     });
+
+    this.t.push(this.formBuilder.group({
+      kriteria: ['', [Validators.required]],
+      jawaban: [''],
+    }));
+
+    this.pendaftaranForm.get('items');
+  }
+
+  get f() { return this.pendaftaranForm.controls; }
+  get t() { return this.f.items as FormArray; }
+
+  getAllKriteria(): void {
+    this.loading = true;
+    this.kriteriaService.getAll(this.key).pipe(
+    ).subscribe(
+      (data) => {
+        if (data !== undefined) {
+          this.countItem = data.length;
+          this.t.clear();
+          for (let i = 0; i < data.length; i++) {
+            this.t.push(this.formBuilder.group({
+              kriteria: [data[i].payload.doc.data()['kriteria'], [Validators.required]],
+              jawaban: [''],
+            }));
+          }
+        }
+        this.loading = false;
+      },
+      (error) => {
+      },
+    );
   }
 
   getPhoto() {
@@ -238,6 +277,31 @@ export class FormPendaftaranComponent implements OnInit {
                           `Request failed: ${error}`
                         )
                       });
+
+                    let tempKriteria = [];
+
+                    for (let i = 0; i < this.countItem; i++) {
+                      let dataForm = (<FormArray>this.pendaftaranForm.controls['items']).at(i);
+
+                      let tempData = {
+                        idUkm: this.key,
+                        nomorPendaftaran: this.pendaftaranForm.get('nomorPendaftaran').value,
+                        kriteria: dataForm.get('kriteria').value,
+                        jawaban: dataForm.get('jawaban').value,
+                        dateMake: new Date().getTime()
+                      }
+
+                      tempKriteria.push(tempData);
+                    }
+
+                    tempKriteria.map(val => {
+                      this.jawabanKriteriaService.create(val)
+                        .catch(error => {
+                          Swal.showValidationMessage(
+                            `Request failed: ${error}`
+                          )
+                        });
+                    })
                   })
                 })
               ).subscribe()

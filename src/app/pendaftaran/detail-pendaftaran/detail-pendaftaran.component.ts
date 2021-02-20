@@ -8,6 +8,8 @@ import { PendaftaranService } from 'src/app/services/firebase/pendaftaran.servic
 import { ngxLoadingAnimationTypes } from 'ngx-loading';
 import { Subject } from 'rxjs';
 import { Pendaftaran } from 'src/app/models/pendaftaran.model';
+import { JawabanKriteriaService } from 'src/app/services/firebase/jawaban-kriteria.service';
+import { JawabanKriteria } from 'src/app/models/jawaban-kriteria.model';
 
 @Component({
   selector: 'app-detail-pendaftaran',
@@ -23,6 +25,7 @@ export class DetailPendaftaranComponent implements OnInit {
   public loading: boolean;
   public key: string;
   public pendaftaran: Pendaftaran;
+  public jawabanKriteria: JawabanKriteria[];
 
   public ngxLoadingAnimationTypes = ngxLoadingAnimationTypes;
 
@@ -31,6 +34,7 @@ export class DetailPendaftaranComponent implements OnInit {
   constructor(
     public activatedRoute: ActivatedRoute,
     public pendaftaranService: PendaftaranService,
+    public jawabanKriteriaService: JawabanKriteriaService,
     public angularFirestorage: AngularFireStorage,
     public formBuilder: FormBuilder,
     public location: Location,
@@ -40,7 +44,7 @@ export class DetailPendaftaranComponent implements OnInit {
   ngOnInit(): void {
     this.key = this.activatedRoute.snapshot.paramMap.get('key');
     this.formValidation();
-    this.getPendaftaran();
+    this.getPendaftaran();    
   }
 
   getPendaftaran(): void {
@@ -57,6 +61,29 @@ export class DetailPendaftaranComponent implements OnInit {
         this.fillData();
       },
       (error) => { },
+    );
+  }
+
+  getAllJawabanKriteria(nomorPendaftaran): void {
+    this.loading = true;
+    this.jawabanKriteriaService.getAll(nomorPendaftaran).pipe(
+    ).subscribe(
+      (data) => {
+        this.jawabanKriteria = data.map(e => {
+          return {
+            id: e.payload.doc.id,
+            idUkm: e.payload.doc.data()['idUkm'],
+            kriteria: e.payload.doc.data()['kriteria'],
+            jawaban: e.payload.doc.data()['jawaban'],
+            nomorPendaftaran: e.payload.doc.data()['nomorPendaftaran'],
+            dateMake: e.payload.doc.data()['dateMake'],
+          }
+        });                
+        this.loading = false;
+      },
+      (error) => {
+        console.log(error);
+      },
     );
   }
 
@@ -77,6 +104,8 @@ export class DetailPendaftaranComponent implements OnInit {
     this.pendaftaranForm.get('bakat').setValue(this.pendaftaran.bakat);
     this.pendaftaranForm.get('alasan').setValue(this.pendaftaran.alasan);
     this.pendaftaranForm.get('tanya').setValue(this.pendaftaran.tanya);
+
+    this.getAllJawabanKriteria(this.pendaftaran.nomorPendaftaran);
   }
 
   formValidation(): void {

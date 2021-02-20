@@ -1,14 +1,16 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { AngularFireStorage } from '@angular/fire/storage';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { finalize, take, takeUntil } from 'rxjs/operators';
 import Swal from 'sweetalert2';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { UkmService } from 'src/app/services/firebase/ukm.service';
+import { KriteriaService } from 'src/app/services/firebase/kriteria.service';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { Subject } from 'rxjs';
 import { Ukm } from 'src/app/models/ukm.model';
+import { Kriteria } from 'src/app/models/kriteria.model';
 
 @Component({
   selector: 'app-ubah-ukm',
@@ -24,8 +26,10 @@ export class UbahUkmComponent implements OnInit {
   public fileLogoPhoto: File;
   public fileStrukturPhoto: File;
   public key: string;
+  private countItem: number = 1;
 
   public ukm: Ukm;
+  public kriteria: Kriteria[];
   public loading: boolean;
 
   @ViewChild('photoLogo') photoLogo: ElementRef;
@@ -34,6 +38,7 @@ export class UbahUkmComponent implements OnInit {
   constructor(
     public activatedRoute: ActivatedRoute,
     public ukmService: UkmService,
+    public kriteriaService: KriteriaService,
     public angularFirestorage: AngularFireStorage,
     public angularFireAuth: AngularFireAuth,
     public formBuilder: FormBuilder,
@@ -45,6 +50,7 @@ export class UbahUkmComponent implements OnInit {
     this.key = this.activatedRoute.snapshot.paramMap.get('key');
     this.formValidation();
     this.getUkm();
+    this.getAllKriteria();
   }
 
   getUkm(): void {
@@ -84,9 +90,36 @@ export class UbahUkmComponent implements OnInit {
       alamat: new FormControl(null, [Validators.required]),
       fileLogoName: new FormControl(null, [Validators.required]),
       fileStrukturName: new FormControl(null, [Validators.required]),
-      email: new FormControl({ value: null, disabled: true }, [Validators.required, Validators.email]),
-      password: new FormControl({ value: null, disabled: true }, [Validators.required, Validators.minLength(6)]),
+      email: new FormControl({ value: null, disabled: true }),
+      password: new FormControl({ value: null, disabled: true }),
+      items: new FormArray([])
     });
+
+    this.t.push(this.formBuilder.group({
+      kriteria: ['', [Validators.required]],
+    }));
+
+    this.ukmForm.get('items');
+  }
+
+  get f() { return this.ukmForm.controls; }
+  get t() { return this.f.items as FormArray; }
+
+  addControl() {
+    this.countItem++;
+
+    if (this.t.length < this.countItem) {
+      for (let i = this.t.length; i < this.countItem; i++) {
+        this.t.push(this.formBuilder.group({
+          kriteria: ['', Validators.required],
+        }));
+      }
+    }
+  }
+
+  removeControl(index: number): void {
+    this.countItem--;
+    this.t.removeAt(index);
   }
 
   getPhotoLogo() {
@@ -131,6 +164,35 @@ export class UbahUkmComponent implements OnInit {
 
   redirectToManage() {
     this.router.navigateByUrl('ukm/manage-ukm');
+  }
+
+  getAllKriteria(): void {
+    this.loading = true;
+    this.kriteriaService.getAll(this.key).pipe(
+    ).subscribe(
+      (data) => {
+        this.kriteria = data.map(e => {
+          return {
+            id: e.payload.doc.id,
+            idUkm: e.payload.doc.data()['idUkm'],
+            kriteria: e.payload.doc.data()['kriteria'],
+            dateMake: e.payload.doc.data()['dateMake'],
+          }
+        });
+        if (data !== undefined) {
+          this.countItem = data.length;
+          this.t.clear();
+          for (let i = 0; i < data.length; i++) {
+            this.t.push(this.formBuilder.group({
+              kriteria: [data[i].payload.doc.data()['kriteria'], [Validators.required]],
+            }));
+          }
+        }
+        this.loading = false;
+      },
+      (error) => {
+      },
+    );
   }
 
   async save(): Promise<void> {
@@ -191,6 +253,35 @@ export class UbahUkmComponent implements OnInit {
                             `Request failed: ${error}`
                           )
                         });
+
+                      if (this.kriteria.length !== 0) {
+                        this.kriteria.map(val => {
+                          this.kriteriaService.delete(val.id);
+                        })
+
+                        let tempKriteria = [];
+
+                        for (let i = 0; i < this.countItem; i++) {
+                          let dataForm = (<FormArray>this.ukmForm.controls['items']).at(i);
+
+                          let tempData = {
+                            idUkm: this.key,
+                            kriteria: dataForm.get('kriteria').value,
+                            dateMake: new Date().getTime()
+                          }
+
+                          tempKriteria.push(tempData);
+                        }
+
+                        tempKriteria.map(val => {
+                          this.kriteriaService.create(val)
+                            .catch(error => {
+                              Swal.showValidationMessage(
+                                `Request failed: ${error}`
+                              )
+                            });
+                        })
+                      }
                     })
                   })
                 ).subscribe()
@@ -218,6 +309,35 @@ export class UbahUkmComponent implements OnInit {
                       `Request failed: ${error}`
                     )
                   });
+
+                if (this.kriteria.length !== 0) {
+                  this.kriteria.map(val => {
+                    this.kriteriaService.delete(val.id);
+                  })
+
+                  let tempKriteria = [];
+
+                  for (let i = 0; i < this.countItem; i++) {
+                    let dataForm = (<FormArray>this.ukmForm.controls['items']).at(i);
+
+                    let tempData = {
+                      idUkm: this.key,
+                      kriteria: dataForm.get('kriteria').value,
+                      dateMake: new Date().getTime()
+                    }
+
+                    tempKriteria.push(tempData);
+                  }
+
+                  tempKriteria.map(val => {
+                    this.kriteriaService.create(val)
+                      .catch(error => {
+                        Swal.showValidationMessage(
+                          `Request failed: ${error}`
+                        )
+                      });
+                  })
+                }
               })
             })
           ).subscribe()
@@ -241,6 +361,35 @@ export class UbahUkmComponent implements OnInit {
                       `Request failed: ${error}`
                     )
                   });
+
+                if (this.kriteria.length !== 0) {
+                  this.kriteria.map(val => {
+                    this.kriteriaService.delete(val.id);
+                  })
+
+                  let tempKriteria = [];
+
+                  for (let i = 0; i < this.countItem; i++) {
+                    let dataForm = (<FormArray>this.ukmForm.controls['items']).at(i);
+
+                    let tempData = {
+                      idUkm: this.key,
+                      kriteria: dataForm.get('kriteria').value,
+                      dateMake: new Date().getTime()
+                    }
+
+                    tempKriteria.push(tempData);
+                  }
+
+                  tempKriteria.map(val => {
+                    this.kriteriaService.create(val)
+                      .catch(error => {
+                        Swal.showValidationMessage(
+                          `Request failed: ${error}`
+                        )
+                      });
+                  })
+                }
               })
             })
           ).subscribe()
@@ -251,6 +400,35 @@ export class UbahUkmComponent implements OnInit {
             deskripsi: this.ukmForm.get('deskripsi').value,
             telp: this.ukmForm.get('telp').value,
             alamat: this.ukmForm.get('alamat').value,
+          }
+
+          if (this.kriteria.length !== 0) {
+            this.kriteria.map(val => {
+              this.kriteriaService.delete(val.id);
+            })
+
+            let tempKriteria = [];
+
+            for (let i = 0; i < this.countItem; i++) {
+              let dataForm = (<FormArray>this.ukmForm.controls['items']).at(i);
+
+              let tempData = {
+                idUkm: this.key,
+                kriteria: dataForm.get('kriteria').value,
+                dateMake: new Date().getTime()
+              }
+
+              tempKriteria.push(tempData);
+            }
+
+            tempKriteria.map(val => {
+              this.kriteriaService.create(val)
+                .catch(error => {
+                  Swal.showValidationMessage(
+                    `Request failed: ${error}`
+                  )
+                });
+            })
           }
 
           return this.ukmService.update(this.key, data)

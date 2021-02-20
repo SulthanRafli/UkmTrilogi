@@ -365,6 +365,42 @@
               </div>
             </div>
           </div>
+          <h4 class="card-title">List Kriteria</h4>
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th class="text-center">No</th>
+                <th class="text-center">Kriteria</th>
+                <th class="text-center">Jawaban</th>                
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of t.controls; let i = index">
+                <ng-container [formGroup]="item">
+                  <td class="text-center">{{ i + 1 }}.</td>
+                  <td class="text-center">
+                    <input
+                      [class.err-input]="
+                        !item.controls.kriteria.valid && (item.controls.kriteria.dirty || isFormEmpty == true)
+                      "
+                      type="text"
+                      class="form-control"
+                      placeholder="Kriteria"
+                      formControlName="kriteria"
+                    />
+                  </td>
+                  <td class="text-center">
+                    <input                     
+                    type="checkbox" 
+                    class="form-control"
+                    formControlName="jawaban"
+                    />
+                  </td>               
+                </ng-container>
+              </tr>
+            </tbody>           
+          </table>
+          <br />
           <div class="row">
             <div class="col-lg-12 rght">
               <button

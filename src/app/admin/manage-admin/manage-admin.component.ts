@@ -88,11 +88,7 @@ export class ManageAdminComponent implements OnInit {
       preConfirm: () => {
         return this.adminService.delete(admin.id)
           .then(() => {
-            this.authService.delete(admin.email, admin.password).catch(err => {
-              Swal.showValidationMessage(
-                `Request failed: ${err}`
-              )
-            });
+            this.authService.delete(admin.email, admin.password);
           })
           .catch(error => {
             Swal.showValidationMessage(

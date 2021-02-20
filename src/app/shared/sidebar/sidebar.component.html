@@ -123,6 +123,39 @@
       <li
         class="nav-item"
         [ngClass]="{
+          active:
+            jadwalPertemuan.isActive ||
+            addJadwalPertemuan.isActive ||
+            ubahJadwalPertemuan.isActive
+        }"
+      >
+        <a
+          class="nav-link"
+          routerLink="jadwal-pertemuan/add-jadwal-pertemuan"
+          routerLinkActive
+          #addJadwalPertemuan="routerLinkActive"
+          style="display: none"
+        ></a>
+        <a
+          class="nav-link"
+          routerLink="jadwal-pertemuan/ubah-jadwal-pertemuan"
+          routerLinkActive
+          #ubahJadwalPertemuan="routerLinkActive"
+          style="display: none"
+        ></a>
+        <a
+          class="nav-link"
+          routerLink="jadwal-pertemuan/manage-jadwal-pertemuan"
+          routerLinkActive
+          #jadwalPertemuan="routerLinkActive"
+        >
+          <span class="menu-title">Jadwal Pertemuan</span>
+          <i class="mdi mdi-calendar menu-icon"></i>
+        </a>
+      </li>
+      <li
+        class="nav-item"
+        [ngClass]="{
           active: berita.isActive || addBerita.isActive || ubahBerita.isActive
         }"
       >
@@ -176,12 +209,9 @@
         class="nav-item"
         [ngClass]="{
           active:
-            lpj.isActive ||
-            proker.isActive ||
+            lpj.isActive ||            
             addLpj.isActive ||
-            ubahLpj.isActive ||
-            addProker.isActive ||
-            ubahProker.isActive
+            ubahLpj.isActive  
         }"
       >
         <a
@@ -219,7 +249,7 @@
                 >LPJ</a
               >
             </li>
-            <li class="nav-item">
+            <!-- <li class="nav-item">
               <a
                 class="nav-link"
                 routerLink="manajemen-file/add-proker"
@@ -241,7 +271,7 @@
                 #proker="routerLinkActive"
                 >PROKER</a
               >
-            </li>
+            </li> -->
           </ul>
         </div>
       </li>

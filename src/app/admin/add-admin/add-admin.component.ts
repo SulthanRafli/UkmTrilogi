@@ -117,10 +117,6 @@ export class AddAdminComponent implements OnInit {
                 }
 
                 this.adminService.create(res.user.uid, data)
-                  .then(res => {
-                    this.angularFireAuth.signOut();
-                    this.authService.login(this.admin.email, this.admin.password);
-                  })
                   .catch(error => {
                     Swal.showValidationMessage(
                       `Request failed: ${error}`

@@ -52,24 +52,8 @@ export class AuthService {
   delete(email: string, password: string) {
     this.admin = JSON.parse(localStorage.getItem('admin'));
     if (email == this.admin.email && password == this.admin.password) {
-      return this.angularFireAuth.signInWithEmailAndPassword(email, password).then(user => {
-        user.user.delete();
-        localStorage.clear();
-      }).catch(err => {
-        throw err;
-      })
-    } else {
-      this.angularFireAuth.signInWithEmailAndPassword(email, password).then(user => {
-        user.user.delete();
-      }).catch(err => {
-        throw err;
-      })
-      return this.angularFireAuth.signInWithEmailAndPassword(this.admin.email, this.admin.password).then(user => {
-        this.authState = user;
-        this.authId = user.user.uid;
-      }).catch(err => {
-        throw err;
-      })
+      localStorage.clear();
+      this.angularFireAuth.signOut();
     }
   }
 }
