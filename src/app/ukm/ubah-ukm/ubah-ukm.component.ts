@@ -170,7 +170,7 @@ export class UbahUkmComponent implements OnInit {
     this.loading = true;
     this.kriteriaService.getAll(this.key).pipe(
     ).subscribe(
-      (data) => {
+      (data) => {        
         this.kriteria = data.map(e => {
           return {
             id: e.payload.doc.id,
@@ -179,7 +179,7 @@ export class UbahUkmComponent implements OnInit {
             dateMake: e.payload.doc.data()['dateMake'],
           }
         });
-        if (data !== undefined) {
+        if (data.length !== 0) {
           this.countItem = data.length;
           this.t.clear();
           for (let i = 0; i < data.length; i++) {
@@ -191,6 +191,7 @@ export class UbahUkmComponent implements OnInit {
         this.loading = false;
       },
       (error) => {
+        console.log(error);
       },
     );
   }
