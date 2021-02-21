@@ -82,72 +82,72 @@ export class AddAnggotaComponent implements OnInit {
       this.isFormEmpty = true;
     } else {
       this.isFormEmpty = false;
+
+      const date = Date.now()
+      const typeData = this.anggotaForm.get('fileName').value.substr(this.anggotaForm.get('fileName').value.lastIndexOf(".") + 1);
+      const newFileName = `AnggotaProfile-${date}.${typeData}`;
+      const filePath = `Anggota/${newFileName}`;
+      const fileRef = this.angularFirestorage.ref(filePath);
+      const uploadTask = this.angularFirestorage.upload(filePath, this.filePhoto);
+
+      Swal.fire({
+        title: "Anda sudah yakin melakukan penginputan data ?",
+        text: "Pastikan data yang diinput benar!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: 'Iya',
+        cancelButtonText: 'Tidak',
+        confirmButtonColor: '#07cdae',
+        cancelButtonColor: '#fe7096',
+        reverseButtons: true,
+        showLoaderOnConfirm: true,
+        preConfirm: () => {
+          uploadTask.snapshotChanges().pipe(
+            finalize(() => {
+              fileRef.getDownloadURL().subscribe(url => {
+
+                const data = {
+                  idUkm: this.ukm.id,
+                  namaUkm: this.ukm.nama,
+                  nama: this.anggotaForm.get('nama').value,
+                  email: this.anggotaForm.get('email').value,
+                  jenisKelamin: this.anggotaForm.get('jenisKelamin').value,
+                  telp: this.anggotaForm.get('telp').value,
+                  tempatLahir: this.anggotaForm.get('tempatLahir').value,
+                  tanggalLahir: moment(this.anggotaForm.get('tanggalLahir').value).format('YYYY-MM-DD'),
+                  jurusan: this.anggotaForm.get('jurusan').value,
+                  fakultas: this.anggotaForm.get('fakultas').value,
+                  alamat: this.anggotaForm.get('alamat').value,
+                  fileName: this.anggotaForm.get('fileName').value,
+                  imageUrl: url,
+                  dateMake: new Date().getTime()
+                }
+
+                this.anggotaService.create(data)
+                  .catch(error => {
+                    Swal.showValidationMessage(
+                      `Request failed: ${error}`
+                    )
+                  });
+              });
+            })
+          ).subscribe();
+          return uploadTask.percentageChanges();
+        },
+        allowOutsideClick: () => !Swal.isLoading()
+      }).then((result) => {
+        if (result.isConfirmed) {
+          Swal.fire({
+            icon: 'success',
+            text: 'Data Berhasil Disimpan',
+            confirmButtonColor: '#07cdae',
+          }).then((result) => {
+            if (result.value) {
+              this.redirectToManage();
+            }
+          });
+        }
+      })
     }
-
-    const date = Date.now()
-    const typeData = this.anggotaForm.get('fileName').value.substr(this.anggotaForm.get('fileName').value.lastIndexOf(".") + 1);
-    const newFileName = `AnggotaProfile-${date}.${typeData}`;
-    const filePath = `Anggota/${newFileName}`;
-    const fileRef = this.angularFirestorage.ref(filePath);
-    const uploadTask = this.angularFirestorage.upload(filePath, this.filePhoto);
-
-    Swal.fire({
-      title: "Anda sudah yakin melakukan penginputan data ?",
-      text: "Pastikan data yang diinput benar!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonText: 'Iya',
-      cancelButtonText: 'Tidak',
-      confirmButtonColor: '#07cdae',
-      cancelButtonColor: '#fe7096',
-      reverseButtons: true,
-      showLoaderOnConfirm: true,
-      preConfirm: () => {
-        uploadTask.snapshotChanges().pipe(
-          finalize(() => {
-            fileRef.getDownloadURL().subscribe(url => {
-
-              const data = {
-                idUkm: this.ukm.id,
-                namaUkm: this.ukm.nama,
-                nama: this.anggotaForm.get('nama').value,
-                email: this.anggotaForm.get('email').value,
-                jenisKelamin: this.anggotaForm.get('jenisKelamin').value,
-                telp: this.anggotaForm.get('telp').value,
-                tempatLahir: this.anggotaForm.get('tempatLahir').value,
-                tanggalLahir: moment(this.anggotaForm.get('tanggalLahir').value).format('YYYY-MM-DD'),
-                jurusan: this.anggotaForm.get('jurusan').value,
-                fakultas: this.anggotaForm.get('fakultas').value,
-                alamat: this.anggotaForm.get('alamat').value,
-                fileName: this.anggotaForm.get('fileName').value,
-                imageUrl: url,
-                dateMake: new Date().getTime()
-              }
-
-              this.anggotaService.create(data)
-                .catch(error => {
-                  Swal.showValidationMessage(
-                    `Request failed: ${error}`
-                  )
-                });
-            });
-          })
-        ).subscribe();
-        return uploadTask.percentageChanges();
-      },
-      allowOutsideClick: () => !Swal.isLoading()
-    }).then((result) => {
-      if (result.isConfirmed) {
-        Swal.fire({
-          icon: 'success',
-          text: 'Data Berhasil Disimpan',
-          confirmButtonColor: '#07cdae',
-        }).then((result) => {
-          if (result.value) {
-            this.redirectToManage();
-          }
-        });
-      }
-    })
   }
 }

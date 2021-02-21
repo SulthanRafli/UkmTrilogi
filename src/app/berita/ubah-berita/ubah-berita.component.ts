@@ -112,79 +112,79 @@ export class UbahBeritaComponent implements OnInit {
       this.isFormEmpty = true;
     } else {
       this.isFormEmpty = false;
-    }
 
-    const date = Date.now()
-    const typeData = this.beritaForm.get('fileName').value.substr(this.beritaForm.get('fileName').value.lastIndexOf(".") + 1);
-    const newFileName = `Berita-${date}.${typeData}`;
-    const filePath = `Berita/${newFileName}`;
-    const fileRef = this.angularFirestorage.ref(filePath);
-    const uploadTask = this.angularFirestorage.upload(filePath, this.filePhoto);
+      const date = Date.now()
+      const typeData = this.beritaForm.get('fileName').value.substr(this.beritaForm.get('fileName').value.lastIndexOf(".") + 1);
+      const newFileName = `Berita-${date}.${typeData}`;
+      const filePath = `Berita/${newFileName}`;
+      const fileRef = this.angularFirestorage.ref(filePath);
+      const uploadTask = this.angularFirestorage.upload(filePath, this.filePhoto);
 
-    Swal.fire({
-      title: "Anda Anda sudah yakin melakukan perubahan data ?",
-      text: "Pastikan data yang diinput benar!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonText: 'Iya',
-      cancelButtonText: 'Tidak',
-      confirmButtonColor: '#07cdae',
-      cancelButtonColor: '#fe7096',
-      reverseButtons: true,
-      showLoaderOnConfirm: true,
-      preConfirm: () => {
-        if (this.filePhoto !== undefined) {
-          uploadTask.snapshotChanges().pipe(
-            finalize(() => {
-              fileRef.getDownloadURL().subscribe(url => {
+      Swal.fire({
+        title: "Anda Anda sudah yakin melakukan perubahan data ?",
+        text: "Pastikan data yang diinput benar!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: 'Iya',
+        cancelButtonText: 'Tidak',
+        confirmButtonColor: '#07cdae',
+        cancelButtonColor: '#fe7096',
+        reverseButtons: true,
+        showLoaderOnConfirm: true,
+        preConfirm: () => {
+          if (this.filePhoto !== undefined) {
+            uploadTask.snapshotChanges().pipe(
+              finalize(() => {
+                fileRef.getDownloadURL().subscribe(url => {
 
-                const data = {
-                  judul: this.beritaForm.get('judul').value,
-                  isiBerita: this.beritaForm.get('isiBerita').value,
-                  namaPenulis: this.beritaForm.get('namaPenulis').value,
-                  fileName: this.beritaForm.get('fileName').value,
-                  imageUrl: url
-                }
+                  const data = {
+                    judul: this.beritaForm.get('judul').value,
+                    isiBerita: this.beritaForm.get('isiBerita').value,
+                    namaPenulis: this.beritaForm.get('namaPenulis').value,
+                    fileName: this.beritaForm.get('fileName').value,
+                    imageUrl: url
+                  }
 
-                this.beritaService.update(this.key, data)
-                  .catch(error => {
-                    Swal.showValidationMessage(
-                      `Request failed: ${error}`
-                    )
-                  });
+                  this.beritaService.update(this.key, data)
+                    .catch(error => {
+                      Swal.showValidationMessage(
+                        `Request failed: ${error}`
+                      )
+                    });
+                });
+              })
+            ).subscribe();
+            return uploadTask.percentageChanges();
+          } else {
+
+            const data = {
+              judul: this.beritaForm.get('judul').value,
+              isiBerita: this.beritaForm.get('isiBerita').value,
+              namaPenulis: this.beritaForm.get('namaPenulis').value,
+            }
+
+            return this.beritaService.update(this.key, data)
+              .catch(error => {
+                Swal.showValidationMessage(
+                  `Request failed: ${error}`
+                )
               });
-            })
-          ).subscribe();
-          return uploadTask.percentageChanges();
-        } else {
-
-          const data = {
-            judul: this.beritaForm.get('judul').value,
-            isiBerita: this.beritaForm.get('isiBerita').value,
-            namaPenulis: this.beritaForm.get('namaPenulis').value,
           }
-
-          return this.beritaService.update(this.key, data)
-            .catch(error => {
-              Swal.showValidationMessage(
-                `Request failed: ${error}`
-              )
-            });
+        },
+        allowOutsideClick: () => !Swal.isLoading()
+      }).then((result) => {
+        if (result.isConfirmed) {
+          Swal.fire({
+            icon: 'success',
+            text: 'Data Berhasil Diperbarui',
+            confirmButtonColor: '#07cdae',
+          }).then((result) => {
+            if (result.value) {
+              this.redirectToManage();
+            }
+          });
         }
-      },
-      allowOutsideClick: () => !Swal.isLoading()
-    }).then((result) => {
-      if (result.isConfirmed) {
-        Swal.fire({
-          icon: 'success',
-          text: 'Data Berhasil Diperbarui',
-          confirmButtonColor: '#07cdae',
-        }).then((result) => {
-          if (result.value) {
-            this.redirectToManage();
-          }
-        });
-      }
-    })
+      })
+    }
   }
 }

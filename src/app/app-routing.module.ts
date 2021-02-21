@@ -115,6 +115,11 @@ const routes: Routes = [
         canActivate: [AdministratorGuard],
         loadChildren: () => import('./ukm/ukm.module').then(m => m.UkmModule)
       },
+      {
+        path: 'mahasiswa',
+        canActivate: [AdministratorGuard],
+        loadChildren: () => import('./mahasiswa/mahasiswa.module').then(m => m.MahasiswaModule)
+      },
     ]
   },
   { path: '**', redirectTo: '/404' },

@@ -337,6 +337,36 @@
           <i class="mdi mdi-monitor-multiple menu-icon"></i>
         </a>
       </li>
+      <li
+        class="nav-item"
+        [ngClass]="{
+          active: mahasiswa.isActive || addMahasiswa.isActive || ubahMahasiswa.isActive
+        }"
+      >
+        <a
+          class="nav-link"
+          routerLink="mahasiswa/add-mahasiswa"
+          routerLinkActive
+          #addMahasiswa="routerLinkActive"
+          style="display: none"
+        ></a>
+        <a
+          class="nav-link"
+          routerLink="mahasiswa/ubah-mahasiswa"
+          routerLinkActive
+          #ubahMahasiswa="routerLinkActive"
+          style="display: none"
+        ></a>
+        <a
+          class="nav-link"
+          routerLink="mahasiswa/manage-mahasiswa"
+          routerLinkActive
+          #mahasiswa="routerLinkActive"
+        >
+          <span class="menu-title">Mahasiswa</span>
+          <i class="mdi mdi-account-multiple menu-icon"></i>
+        </a>
+      </li>
     </ng-container>
   </ul>
 </nav>

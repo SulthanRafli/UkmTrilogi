@@ -109,78 +109,78 @@ export class UbahLpjComponent implements OnInit {
       this.isFormEmpty = true;
     } else {
       this.isFormEmpty = false;
-    }
 
-    const date = Date.now()
-    const typeData = this.lpjForm.get('fileName').value.substr(this.lpjForm.get('fileName').value.lastIndexOf(".") + 1);
-    const newFileName = `Lpj-${date}.${typeData}`;
-    const filePath = `Lpj/${newFileName}`;
-    const fileRef = this.angularFirestorage.ref(filePath);
-    const uploadTask = this.angularFirestorage.upload(filePath, this.fileLpj);
+      const date = Date.now()
+      const typeData = this.lpjForm.get('fileName').value.substr(this.lpjForm.get('fileName').value.lastIndexOf(".") + 1);
+      const newFileName = `Lpj-${date}.${typeData}`;
+      const filePath = `Lpj/${newFileName}`;
+      const fileRef = this.angularFirestorage.ref(filePath);
+      const uploadTask = this.angularFirestorage.upload(filePath, this.fileLpj);
 
-    Swal.fire({
-      title: "Anda Anda sudah yakin melakukan perubahan data ?",
-      text: "Pastikan data yang diinput benar!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonText: 'Iya',
-      cancelButtonText: 'Tidak',
-      confirmButtonColor: '#07cdae',
-      cancelButtonColor: '#fe7096',
-      reverseButtons: true,
-      showLoaderOnConfirm: true,
-      preConfirm: () => {
-        if (this.fileLpj !== undefined) {
-          uploadTask.snapshotChanges().pipe(
-            finalize(() => {
-              fileRef.getDownloadURL().subscribe(url => {
-                const data = {
-                  judul: this.lpjForm.get('judul').value,
-                  namaDivisi: this.lpjForm.get('namaDivisi').value,
-                  tanggalPeriode: moment(this.lpjForm.get('tanggalPeriode').value).format('YYYY-MM-DD'),
-                  fileName: this.lpjForm.get('fileName').value,
-                  fileUrl: url,
-                }
+      Swal.fire({
+        title: "Anda Anda sudah yakin melakukan perubahan data ?",
+        text: "Pastikan data yang diinput benar!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: 'Iya',
+        cancelButtonText: 'Tidak',
+        confirmButtonColor: '#07cdae',
+        cancelButtonColor: '#fe7096',
+        reverseButtons: true,
+        showLoaderOnConfirm: true,
+        preConfirm: () => {
+          if (this.fileLpj !== undefined) {
+            uploadTask.snapshotChanges().pipe(
+              finalize(() => {
+                fileRef.getDownloadURL().subscribe(url => {
+                  const data = {
+                    judul: this.lpjForm.get('judul').value,
+                    namaDivisi: this.lpjForm.get('namaDivisi').value,
+                    tanggalPeriode: moment(this.lpjForm.get('tanggalPeriode').value).format('YYYY-MM-DD'),
+                    fileName: this.lpjForm.get('fileName').value,
+                    fileUrl: url,
+                  }
 
-                this.lpjService.update(this.key, data)
-                  .catch(error => {
-                    Swal.showValidationMessage(
-                      `Request failed: ${error}`
-                    )
-                  });
+                  this.lpjService.update(this.key, data)
+                    .catch(error => {
+                      Swal.showValidationMessage(
+                        `Request failed: ${error}`
+                      )
+                    });
+                });
+              })
+            ).subscribe();
+            return uploadTask.percentageChanges();
+          } else {
+
+            const data = {
+              judul: this.lpjForm.get('judul').value,
+              namaDivisi: this.lpjForm.get('namaDivisi').value,
+              tanggalPeriode: moment(this.lpjForm.get('tanggalPeriode').value).format('YYYY-MM-DD'),
+            }
+
+            return this.lpjService.update(this.key, data)
+              .catch(error => {
+                Swal.showValidationMessage(
+                  `Request failed: ${error}`
+                )
               });
-            })
-          ).subscribe();
-          return uploadTask.percentageChanges();
-        } else {
-
-          const data = {
-            judul: this.lpjForm.get('judul').value,
-            namaDivisi: this.lpjForm.get('namaDivisi').value,
-            tanggalPeriode: moment(this.lpjForm.get('tanggalPeriode').value).format('YYYY-MM-DD'),
           }
-
-          return this.lpjService.update(this.key, data)
-            .catch(error => {
-              Swal.showValidationMessage(
-                `Request failed: ${error}`
-              )
-            });
+        },
+        allowOutsideClick: () => !Swal.isLoading()
+      }).then((result) => {
+        if (result.isConfirmed) {
+          Swal.fire({
+            icon: 'success',
+            text: 'Data Berhasil Diperbarui',
+            confirmButtonColor: '#07cdae',
+          }).then((result) => {
+            if (result.value) {
+              this.redirectToManage();
+            }
+          });
         }
-      },
-      allowOutsideClick: () => !Swal.isLoading()
-    }).then((result) => {
-      if (result.isConfirmed) {
-        Swal.fire({
-          icon: 'success',
-          text: 'Data Berhasil Diperbarui',
-          confirmButtonColor: '#07cdae',
-        }).then((result) => {
-          if (result.value) {
-            this.redirectToManage();
-          }
-        });
-      }
-    })
+      })
+    }
   }
 }

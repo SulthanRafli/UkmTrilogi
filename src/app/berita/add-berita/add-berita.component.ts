@@ -78,67 +78,68 @@ export class AddBeritaComponent implements OnInit {
       this.isFormEmpty = true;
     } else {
       this.isFormEmpty = false;
+
+
+      const date = Date.now()
+      const typeData = this.beritaForm.get('fileName').value.substr(this.beritaForm.get('fileName').value.lastIndexOf(".") + 1);
+      const newFileName = `Berita-${date}.${typeData}`;
+      const filePath = `Berita/${newFileName}`;
+      const fileRef = this.angularFirestorage.ref(filePath);
+      const uploadTask = this.angularFirestorage.upload(filePath, this.filePhoto);
+
+      Swal.fire({
+        title: "Anda sudah yakin melakukan penginputan data ?",
+        text: "Pastikan data yang diinput benar!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: 'Iya',
+        cancelButtonText: 'Tidak',
+        confirmButtonColor: '#07cdae',
+        cancelButtonColor: '#fe7096',
+        reverseButtons: true,
+        showLoaderOnConfirm: true,
+        preConfirm: () => {
+          uploadTask.snapshotChanges().pipe(
+            finalize(() => {
+              fileRef.getDownloadURL().subscribe(url => {
+
+                const data = {
+                  idUkm: this.ukm.id,
+                  namaUkm: this.ukm.nama,
+                  judul: this.beritaForm.get('judul').value,
+                  isiBerita: this.beritaForm.get('isiBerita').value,
+                  namaPenulis: this.beritaForm.get('namaPenulis').value,
+                  tanggalUpload: moment(this.beritaForm.get('tanggalUpload').value).format('YYYY-MM-DD'),
+                  fileName: this.beritaForm.get('fileName').value,
+                  imageUrl: url,
+                  dateMake: new Date().getTime()
+                }
+
+                this.beritaService.create(data)
+                  .catch(error => {
+                    Swal.showValidationMessage(
+                      `Request failed: ${error}`
+                    )
+                  });
+              });
+            })
+          ).subscribe();
+          return uploadTask.percentageChanges();
+        },
+        allowOutsideClick: () => !Swal.isLoading()
+      }).then((result) => {
+        if (result.isConfirmed) {
+          Swal.fire({
+            icon: 'success',
+            text: 'Data Berhasil Disimpan',
+            confirmButtonColor: '#07cdae',
+          }).then((result) => {
+            if (result.value) {
+              this.redirectToManage();
+            }
+          });
+        }
+      })
     }
-
-    const date = Date.now()
-    const typeData = this.beritaForm.get('fileName').value.substr(this.beritaForm.get('fileName').value.lastIndexOf(".") + 1);
-    const newFileName = `Berita-${date}.${typeData}`;
-    const filePath = `Berita/${newFileName}`;
-    const fileRef = this.angularFirestorage.ref(filePath);
-    const uploadTask = this.angularFirestorage.upload(filePath, this.filePhoto);
-
-    Swal.fire({
-      title: "Anda sudah yakin melakukan penginputan data ?",
-      text: "Pastikan data yang diinput benar!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonText: 'Iya',
-      cancelButtonText: 'Tidak',
-      confirmButtonColor: '#07cdae',
-      cancelButtonColor: '#fe7096',
-      reverseButtons: true,
-      showLoaderOnConfirm: true,
-      preConfirm: () => {
-        uploadTask.snapshotChanges().pipe(
-          finalize(() => {
-            fileRef.getDownloadURL().subscribe(url => {
-
-              const data = {
-                idUkm: this.ukm.id,
-                namaUkm: this.ukm.nama,
-                judul: this.beritaForm.get('judul').value,
-                isiBerita: this.beritaForm.get('isiBerita').value,
-                namaPenulis: this.beritaForm.get('namaPenulis').value,
-                tanggalUpload: moment(this.beritaForm.get('tanggalUpload').value).format('YYYY-MM-DD'),
-                fileName: this.beritaForm.get('fileName').value,
-                imageUrl: url,
-                dateMake: new Date().getTime()
-              }
-
-              this.beritaService.create(data)
-                .catch(error => {
-                  Swal.showValidationMessage(
-                    `Request failed: ${error}`
-                  )
-                });
-            });
-          })
-        ).subscribe();
-        return uploadTask.percentageChanges();
-      },
-      allowOutsideClick: () => !Swal.isLoading()
-    }).then((result) => {
-      if (result.isConfirmed) {
-        Swal.fire({
-          icon: 'success',
-          text: 'Data Berhasil Disimpan',
-          confirmButtonColor: '#07cdae',
-        }).then((result) => {
-          if (result.value) {
-            this.redirectToManage();
-          }
-        });
-      }
-    })
   }
 }

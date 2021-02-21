@@ -6,418 +6,458 @@
         <div [formGroup]="pendaftaranForm" class="form-sample">
           <p class="card-description"></p>
           <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-12">
               <div class="form-group row">
-                <label class="col-sm-3 col-form-label">Nomor Pendaftaran</label>
-                <div class="col-sm-9">
-                  <input
-                    type="text"               
-                    class="form-control"
-                    class="form-control"
-                    placeholder="Nomor Pendaftaran"
-                    formControlName="nomorPendaftaran"
-                  />
-                </div>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group row">
-                <label class="col-sm-3 col-form-label">Nama Lengkap</label>
-                <div class="col-sm-9">
-                  <input
-                    type="text"
-                    [class.err-input]="
-                      !pendaftaranForm.controls.nama.valid &&
-                      (pendaftaranForm.controls.nama.dirty || isFormEmpty)
-                    "
-                    class="form-control"
-                    placeholder="Nama Lengkap"
-                    formControlName="nama"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-6">
-              <div class="form-group row">
-                <label class="col-sm-3 col-form-label">Email</label>
-                <div class="col-sm-9">
-                  <input
-                    type="email"
-                    [class.err-input]="
-                      !pendaftaranForm.controls.email.valid &&
-                      (pendaftaranForm.controls.email.dirty || isFormEmpty)
-                    "
-                    class="form-control"
-                    placeholder="Email"
-                    formControlName="email"
-                  />
-                </div>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group row">
-                <label class="col-sm-3 col-form-label">Jenis Kelamin</label>
-                <div class="col-sm-9">
-                  <select
-                    [class.err-input]="
-                      !pendaftaranForm.controls.jenisKelamin.valid &&
-                      (pendaftaranForm.controls.jenisKelamin.dirty ||
-                        isFormEmpty)
-                    "
-                    formControlName="jenisKelamin"
-                    class="form-control"
-                  >
-                    <option value="Laki - laki">Laki - laki</option>
-                    <option value="Perempuan">Perempuan</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-6">
-              <div class="form-group row">
-                <label class="col-sm-3 col-form-label">Nomor Handphone</label>
-                <div class="col-sm-9">
-                  <input
-                    type="text"
-                    [class.err-input]="
-                      !pendaftaranForm.controls.telp.valid &&
-                      (pendaftaranForm.controls.telp.dirty || isFormEmpty)
-                    "
-                    class="form-control"
-                    placeholder="Nomor Handphone"
-                    formControlName="telp"
-                  />
-                </div>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group row">
-                <label class="col-sm-3 col-form-label">Tempat Lahir</label>
-                <div class="col-sm-9">
-                  <input
-                    type="text"
-                    [class.err-input]="
-                      !pendaftaranForm.controls.tempatLahir.valid &&
-                      (pendaftaranForm.controls.tempatLahir.dirty ||
-                        isFormEmpty)
-                    "
-                    class="form-control"
-                    placeholder="Tempat Lahir"
-                    formControlName="tempatLahir"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-6">
-              <div class="form-group row">
-                <label class="col-sm-3 col-form-label">Tanggal Lahir</label>
-                <div class="col-sm-9">
-                  <input
-                    [class.err-input]="
-                      !pendaftaranForm.controls.tanggalLahir.valid &&
-                      (pendaftaranForm.controls.tanggalLahir.dirty ||
-                        isFormEmpty)
-                    "
-                    type="date"
-                    class="form-control bg-white"
-                    [value]="
-                      pendaftaranForm.value.tanggalLahir | date: 'yyyy-MM-dd'
-                    "
-                    (click)="picker1.open()"
-                    readonly
-                  />
-                  <mat-form-field>
-                    <input
-                      matInput
-                      readonly
-                      formControlName="tanggalLahir"
-                      [matDatepicker]="picker1"
-                    />
-                    <mat-datepicker-toggle
-                      matSuffix
-                      [for]="picker1"
-                    ></mat-datepicker-toggle>
-                    <mat-datepicker touchUi #picker1></mat-datepicker>
-                  </mat-form-field>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group row">
-                <label class="col-sm-3 col-form-label">Jurusan</label>
-                <div class="col-sm-9">
-                  <input
-                    type="text"
-                    [class.err-input]="
-                      !pendaftaranForm.controls.jurusan.valid &&
-                      (pendaftaranForm.controls.jurusan.dirty || isFormEmpty)
-                    "
-                    class="form-control"
-                    placeholder="Jurusan"
-                    formControlName="jurusan"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-6">
-              <div class="form-group row">
-                <label class="col-sm-3 col-form-label">Fakultas</label>
-                <div class="col-sm-9">
-                  <select
-                    [class.err-input]="
-                      !pendaftaranForm.controls.fakultas.valid &&
-                      (pendaftaranForm.controls.fakultas.dirty || isFormEmpty)
-                    "
-                    formControlName="fakultas"
-                    class="form-control"
-                  >
-                    <option value="Ekonomi">Ekonomi</option>
-                    <option value="Teknik">Teknik</option>
-                    <option value="Bioindustri">Bioindustri</option>
-                    <option value="Keguruan & Ilmu Pendidikan">Keguruan & Ilmu Pendidikan</option>
-                    <option value="Akuntansi">Akuntansi</option>
-                    <option value="Seni Rupa & Desain">Seni Rupa & Desain</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group row">
-                <label class="col-sm-3 col-form-label">Alamat</label>
-                <div class="col-sm-9">
-                  <textarea
-                    class="form-control"
-                    rows="4"
-                    [class.err-input]="
-                      !pendaftaranForm.controls.alamat.valid &&
-                      (pendaftaranForm.controls.alamat.dirty || isFormEmpty)
-                    "
-                    placeholder="Alamat"
-                    formControlName="alamat"
-                  ></textarea>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-6">
-              <div class="form-group row">
-                <label class="col-sm-3 col-form-label">Foto</label>
-                <div class="col-sm-9">
-                  <input
-                    type="file"
-                    #photo
-                    accept="image/x-png,image/jpeg"
-                    class="file-upload-default"
-                    (change)="uploadPhoto()"
-                  />
+                <div class="col-sm-12">
                   <div class="input-group col-xs-12">
                     <input
                       type="text"
-                      [class.err-input]="
-                        !pendaftaranForm.controls.fileName.valid &&
-                        (pendaftaranForm.controls.fileName.dirty || isFormEmpty)
-                      "
                       class="form-control file-upload-info"
-                      readonly
-                      formControlName="fileName"
-                      placeholder="Upload Image"
+                      formControlName="nim"
+                      placeholder="Cari Mahasiswa Berdasarkan NIM"
                     />
                     <span class="input-group-append">
                       <button
                         class="file-upload-browse btn btn-gradient-primary"
                         type="button"
-                        (click)="getPhoto()"
+                        (click)="getMahasiswa()"
                       >
-                        Upload
+                        Cari
                       </button>
                     </span>
                   </div>
                 </div>
               </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group row">
-                <label class="col-sm-3 col-form-label">Dokumen</label>
-                <div class="col-sm-9">
-                  <input
-                    type="file"
-                    #dokumen                    
-                    class="file-upload-default"
-                    (change)="uploadDokumen()"
-                  />
-                  <div class="input-group col-xs-12">
-                    <input
-                      type="text"
-                      [class.err-input]="
-                        !pendaftaranForm.controls.fileNameDokumen.valid &&
-                        (pendaftaranForm.controls.fileNameDokumen.dirty || isFormEmpty)
-                      "
-                      class="form-control file-upload-info"
-                      readonly
-                      formControlName="fileNameDokumen"
-                      placeholder="Upload Image"
-                    />
-                    <span class="input-group-append">
-                      <button
-                        class="file-upload-browse btn btn-gradient-primary"
-                        type="button"
-                        (click)="getDokumen()"
-                      >
-                        Upload
-                      </button>
-                    </span>
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group row">
+                    <label class="col-sm-3 col-form-label"
+                      >Nomor Pendaftaran</label
+                    >
+                    <div class="col-sm-9">
+                      <input
+                        type="text"
+                        class="form-control"
+                        class="form-control"
+                        placeholder="Nomor Pendaftaran"
+                        formControlName="nomorPendaftaran"
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group row">
+                    <label class="col-sm-3 col-form-label">Nama Lengkap</label>
+                    <div class="col-sm-9">
+                      <input
+                        type="text"
+                        [class.err-input]="
+                          !pendaftaranForm.controls.nama.valid &&
+                          (pendaftaranForm.controls.nama.dirty || isFormEmpty)
+                        "
+                        class="form-control"
+                        placeholder="Nama Lengkap"
+                        formControlName="nama"
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
-          <div class="row" *ngIf="photoPreview">
-            <div class="col-md-6 txt-end">                           
-              <img [src]="photoPreview" alt="photo-img" />            
-            </div>
-          </div>          
-          <br />
-          <div class="row">
-            <div class="col-md-6">
-              <div class="form-group row">
-                <label class="col-sm-3 col-form-label">Hobi</label>
-                <div class="col-sm-9">
-                  <input
-                    type="text"
-                    [class.err-input]="
-                      !pendaftaranForm.controls.hobi.valid &&
-                      (pendaftaranForm.controls.hobi.dirty || isFormEmpty)
-                    "
-                    class="form-control"
-                    placeholder="Hobi"
-                    formControlName="hobi"
-                  />
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group row">
+                    <label class="col-sm-3 col-form-label">Email</label>
+                    <div class="col-sm-9">
+                      <input
+                        type="email"
+                        [class.err-input]="
+                          !pendaftaranForm.controls.email.valid &&
+                          (pendaftaranForm.controls.email.dirty || isFormEmpty)
+                        "
+                        class="form-control"
+                        placeholder="Email"
+                        formControlName="email"
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group row">
+                    <label class="col-sm-3 col-form-label">Jenis Kelamin</label>
+                    <div class="col-sm-9">
+                      <select
+                        [class.err-input]="
+                          !pendaftaranForm.controls.jenisKelamin.valid &&
+                          (pendaftaranForm.controls.jenisKelamin.dirty ||
+                            isFormEmpty)
+                        "
+                        formControlName="jenisKelamin"
+                        class="form-control"
+                      >
+                        <option value="Laki - laki">Laki - laki</option>
+                        <option value="Perempuan">Perempuan</option>
+                      </select>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group row">
-                <label class="col-sm-3 col-form-label">Bakat</label>
-                <div class="col-sm-9">
-                  <input
-                    type="text"
-                    [class.err-input]="
-                      !pendaftaranForm.controls.bakat.valid &&
-                      (pendaftaranForm.controls.bakat.dirty || isFormEmpty)
-                    "
-                    class="form-control"
-                    placeholder="Bakat"
-                    formControlName="bakat"
-                  />
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group row">
+                    <label class="col-sm-3 col-form-label"
+                      >Nomor Handphone</label
+                    >
+                    <div class="col-sm-9">
+                      <input
+                        type="text"
+                        [class.err-input]="
+                          !pendaftaranForm.controls.telp.valid &&
+                          (pendaftaranForm.controls.telp.dirty || isFormEmpty)
+                        "
+                        class="form-control"
+                        placeholder="Nomor Handphone"
+                        formControlName="telp"
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group row">
+                    <label class="col-sm-3 col-form-label">Tempat Lahir</label>
+                    <div class="col-sm-9">
+                      <input
+                        type="text"
+                        [class.err-input]="
+                          !pendaftaranForm.controls.tempatLahir.valid &&
+                          (pendaftaranForm.controls.tempatLahir.dirty ||
+                            isFormEmpty)
+                        "
+                        class="form-control"
+                        placeholder="Tempat Lahir"
+                        formControlName="tempatLahir"
+                      />
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-6">
-              <div class="form-group row">
-                <label class="col-sm-3 col-form-label">Alasan Mendaftar</label>
-                <div class="col-sm-9">
-                  <textarea
-                    class="form-control"
-                    rows="4"
-                    [class.err-input]="
-                      !pendaftaranForm.controls.alasan.valid &&
-                      (pendaftaranForm.controls.alasan.dirty || isFormEmpty)
-                    "
-                    placeholder="Alasan Mendaftar"
-                    formControlName="alasan"
-                  ></textarea>
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group row">
+                    <label class="col-sm-3 col-form-label">Tanggal Lahir</label>
+                    <div class="col-sm-9">
+                      <input
+                        [class.err-input]="
+                          !pendaftaranForm.controls.tanggalLahir.valid &&
+                          (pendaftaranForm.controls.tanggalLahir.dirty ||
+                            isFormEmpty)
+                        "
+                        type="date"
+                        class="form-control bg-white"
+                        [value]="
+                          pendaftaranForm.value.tanggalLahir
+                            | date: 'yyyy-MM-dd'
+                        "
+                        (click)="picker1.open()"
+                        readonly
+                      />
+                      <mat-form-field>
+                        <input
+                          matInput
+                          readonly
+                          formControlName="tanggalLahir"
+                          [matDatepicker]="picker1"
+                        />
+                        <mat-datepicker-toggle
+                          matSuffix
+                          [for]="picker1"
+                        ></mat-datepicker-toggle>
+                        <mat-datepicker touchUi #picker1></mat-datepicker>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group row">
+                    <label class="col-sm-3 col-form-label">Jurusan</label>
+                    <div class="col-sm-9">
+                      <input
+                        type="text"
+                        [class.err-input]="
+                          !pendaftaranForm.controls.jurusan.valid &&
+                          (pendaftaranForm.controls.jurusan.dirty ||
+                            isFormEmpty)
+                        "
+                        class="form-control"
+                        placeholder="Jurusan"
+                        formControlName="jurusan"
+                      />
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group row">
-                <label class="col-sm-3 col-form-label"
-                  >Apa yang anda ketahui tentang UKM ini ?</label
-                >
-                <div class="col-sm-9">
-                  <textarea
-                    class="form-control"
-                    rows="4"
-                    [class.err-input]="
-                      !pendaftaranForm.controls.tanya.valid &&
-                      (pendaftaranForm.controls.tanya.dirty || isFormEmpty)
-                    "
-                    placeholder="Isi Pertanyaan"
-                    formControlName="tanya"
-                  ></textarea>
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group row">
+                    <label class="col-sm-3 col-form-label">Fakultas</label>
+                    <div class="col-sm-9">
+                      <select
+                        [class.err-input]="
+                          !pendaftaranForm.controls.fakultas.valid &&
+                          (pendaftaranForm.controls.fakultas.dirty ||
+                            isFormEmpty)
+                        "
+                        formControlName="fakultas"
+                        class="form-control"
+                      >
+                        <option value="Ekonomi">Ekonomi</option>
+                        <option value="Teknik">Teknik</option>
+                        <option value="Bioindustri">Bioindustri</option>
+                        <option value="Keguruan & Ilmu Pendidikan">
+                          Keguruan & Ilmu Pendidikan
+                        </option>
+                        <option value="Akuntansi">Akuntansi</option>
+                        <option value="Seni Rupa & Desain">
+                          Seni Rupa & Desain
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group row">
+                    <label class="col-sm-3 col-form-label">Alamat</label>
+                    <div class="col-sm-9">
+                      <textarea
+                        class="form-control"
+                        rows="4"
+                        [class.err-input]="
+                          !pendaftaranForm.controls.alamat.valid &&
+                          (pendaftaranForm.controls.alamat.dirty || isFormEmpty)
+                        "
+                        placeholder="Alamat"
+                        formControlName="alamat"
+                      ></textarea>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-          </div>
-          <h4 class="card-title">List Kriteria</h4>
-          <table class="table table-bordered">
-            <thead>
-              <tr>
-                <th class="text-center">No</th>
-                <th class="text-center">Kriteria</th>
-                <th class="text-center">Jawaban</th>                
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let item of t.controls; let i = index">
-                <ng-container [formGroup]="item">
-                  <td class="text-center">{{ i + 1 }}.</td>
-                  <td class="text-center">
-                    <input                 
-                      type="text"
-                      class="form-control"
-                      placeholder="Kriteria"
-                      formControlName="kriteria"
-                    />
-                  </td>
-                  <td class="text-center">
-                    <input                     
-                    type="checkbox" 
-                    class="form-control"
-                    formControlName="jawaban"
-                    />
-                  </td>               
-                </ng-container>
-              </tr>
-            </tbody>           
-          </table>
-          <br />
-          <div class="row">
-            <div class="col-lg-12 rght">
-              <button
-                class="btn btn-gradient-danger btn-md mr-2"
-                (click)="back()"
-              >
-              Kembali</button
-              ><button
-                type="submit"
-                class="btn btn-gradient-success btn-md"
-                (click)="save()"
-              >
-                Simpan
-              </button>
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group row">
+                    <label class="col-sm-3 col-form-label">Foto</label>
+                    <div class="col-sm-9">
+                      <input
+                        type="file"
+                        #photo
+                        accept="image/x-png,image/jpeg"
+                        class="file-upload-default"
+                        (change)="uploadPhoto()"
+                      />
+                      <div class="input-group col-xs-12">
+                        <input
+                          type="text"
+                          [class.err-input]="
+                            !pendaftaranForm.controls.fileName.valid &&
+                            (pendaftaranForm.controls.fileName.dirty ||
+                              isFormEmpty)
+                          "
+                          class="form-control file-upload-info"
+                          readonly
+                          formControlName="fileName"
+                          placeholder="Upload Image"
+                        />
+                        <span class="input-group-append">
+                          <button
+                            class="file-upload-browse btn btn-gradient-primary"
+                            type="button"
+                            (click)="getPhoto()"
+                          >
+                            Upload
+                          </button>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group row">
+                    <label class="col-sm-3 col-form-label">Dokumen</label>
+                    <div class="col-sm-9">
+                      <input
+                        type="file"
+                        #dokumen
+                        class="file-upload-default"
+                        (change)="uploadDokumen()"
+                      />
+                      <div class="input-group col-xs-12">
+                        <input
+                          type="text"
+                          [class.err-input]="
+                            !pendaftaranForm.controls.fileNameDokumen.valid &&
+                            (pendaftaranForm.controls.fileNameDokumen.dirty ||
+                              isFormEmpty)
+                          "
+                          class="form-control file-upload-info"
+                          readonly
+                          formControlName="fileNameDokumen"
+                          placeholder="Upload Image"
+                        />
+                        <span class="input-group-append">
+                          <button
+                            class="file-upload-browse btn btn-gradient-primary"
+                            type="button"
+                            (click)="getDokumen()"
+                          >
+                            Upload
+                          </button>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row" *ngIf="photoPreview">
+                <div class="col-md-6 txt-end">
+                  <img [src]="photoPreview" alt="photo-img" />
+                </div>
+              </div>
+              <br />
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group row">
+                    <label class="col-sm-3 col-form-label">Hobi</label>
+                    <div class="col-sm-9">
+                      <input
+                        type="text"
+                        [class.err-input]="
+                          !pendaftaranForm.controls.hobi.valid &&
+                          (pendaftaranForm.controls.hobi.dirty || isFormEmpty)
+                        "
+                        class="form-control"
+                        placeholder="Hobi"
+                        formControlName="hobi"
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group row">
+                    <label class="col-sm-3 col-form-label">Bakat</label>
+                    <div class="col-sm-9">
+                      <input
+                        type="text"
+                        [class.err-input]="
+                          !pendaftaranForm.controls.bakat.valid &&
+                          (pendaftaranForm.controls.bakat.dirty || isFormEmpty)
+                        "
+                        class="form-control"
+                        placeholder="Bakat"
+                        formControlName="bakat"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group row">
+                    <label class="col-sm-3 col-form-label"
+                      >Alasan Mendaftar</label
+                    >
+                    <div class="col-sm-9">
+                      <textarea
+                        class="form-control"
+                        rows="4"
+                        [class.err-input]="
+                          !pendaftaranForm.controls.alasan.valid &&
+                          (pendaftaranForm.controls.alasan.dirty || isFormEmpty)
+                        "
+                        placeholder="Alasan Mendaftar"
+                        formControlName="alasan"
+                      ></textarea>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group row">
+                    <label class="col-sm-3 col-form-label"
+                      >Apa yang anda ketahui tentang UKM ini ?</label
+                    >
+                    <div class="col-sm-9">
+                      <textarea
+                        class="form-control"
+                        rows="4"
+                        [class.err-input]="
+                          !pendaftaranForm.controls.tanya.valid &&
+                          (pendaftaranForm.controls.tanya.dirty || isFormEmpty)
+                        "
+                        placeholder="Isi Pertanyaan"
+                        formControlName="tanya"
+                      ></textarea>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <h4 class="card-title">List Kriteria</h4>
+              <table class="table table-bordered">
+                <thead>
+                  <tr>
+                    <th class="text-center">No</th>
+                    <th class="text-center">Kriteria</th>
+                    <th class="text-center">Jawaban</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of t.controls; let i = index">
+                    <ng-container [formGroup]="item">
+                      <td class="text-center">{{ i + 1 }}.</td>
+                      <td class="text-center">
+                        <input
+                          type="text"
+                          class="form-control"
+                          placeholder="Kriteria"
+                          formControlName="kriteria"
+                        />
+                      </td>
+                      <td class="text-center">
+                        <input
+                          type="checkbox"
+                          class="form-control"
+                          formControlName="jawaban"
+                        />
+                      </td>
+                    </ng-container>
+                  </tr>
+                </tbody>
+              </table>
+              <br />
+              <div class="row">
+                <div class="col-lg-12 rght">
+                  <button
+                    class="btn btn-gradient-danger btn-md mr-2"
+                    (click)="back()"
+                  >
+                    Kembali</button
+                  ><button
+                    type="submit"
+                    class="btn btn-gradient-success btn-md"
+                    (click)="save()"
+                  >
+                    Simpan
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
+    <ngx-loading
+      [show]="loading"
+      [config]="{
+        animationType: ngxLoadingAnimationTypes.cubeGrid,
+        backdropBorderRadius: '3px'
+      }"
+    ></ngx-loading>
   </div>
 </div>
-<ngx-loading
-  [show]="loading"
-  [config]="{
-    animationType: ngxLoadingAnimationTypes.cubeGrid,
-    backdropBorderRadius: '3px'
-  }"  
-></ngx-loading>

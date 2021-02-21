@@ -201,260 +201,261 @@ export class UbahUkmComponent implements OnInit {
       this.isFormEmpty = true;
     } else {
       this.isFormEmpty = false;
-    }
 
-    const dateLogo = Date.now()
-    const typeDataLogo = this.ukmForm.get('fileLogoName').value.substr(this.ukmForm.get('fileLogoName').value.lastIndexOf(".") + 1);
-    const newFileNameLogo = `UkmLogo-${dateLogo}.${typeDataLogo}`;
-    const filePathLogo = `Ukm/${newFileNameLogo}`;
-    const fileRefLogo = this.angularFirestorage.ref(filePathLogo);
-    const uploadTaskLogo = this.angularFirestorage.upload(filePathLogo, this.fileLogoPhoto);
 
-    const dateStruktur = Date.now()
-    const typeDataStruktur = this.ukmForm.get('fileStrukturName').value.substr(this.ukmForm.get('fileStrukturName').value.lastIndexOf(".") + 1);
-    const newFileNameStruktur = `UkmStruktur-${dateStruktur}.${typeDataStruktur}`;
-    const filePathStruktur = `Ukm/${newFileNameStruktur}`;
-    const fileRefStruktur = this.angularFirestorage.ref(filePathStruktur);
-    const uploadTaskStruktur = this.angularFirestorage.upload(filePathStruktur, this.fileStrukturPhoto);
+      const dateLogo = Date.now()
+      const typeDataLogo = this.ukmForm.get('fileLogoName').value.substr(this.ukmForm.get('fileLogoName').value.lastIndexOf(".") + 1);
+      const newFileNameLogo = `UkmLogo-${dateLogo}.${typeDataLogo}`;
+      const filePathLogo = `Ukm/${newFileNameLogo}`;
+      const fileRefLogo = this.angularFirestorage.ref(filePathLogo);
+      const uploadTaskLogo = this.angularFirestorage.upload(filePathLogo, this.fileLogoPhoto);
 
-    Swal.fire({
-      title: "Anda Anda sudah yakin melakukan perubahan data ?",
-      text: "Pastikan data yang diinput benar!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonText: 'Iya',
-      cancelButtonText: 'Tidak',
-      confirmButtonColor: '#07cdae',
-      cancelButtonColor: '#fe7096',
-      reverseButtons: true,
-      showLoaderOnConfirm: true,
-      preConfirm: () => {
-        if (this.fileLogoPhoto !== undefined && this.fileStrukturPhoto !== undefined) {
-          uploadTaskLogo.snapshotChanges().pipe(
-            finalize(() => {
-              fileRefLogo.getDownloadURL().subscribe(urlLogo => {
-                uploadTaskStruktur.snapshotChanges().pipe(
-                  finalize(() => {
-                    fileRefStruktur.getDownloadURL().subscribe(urlStruktur => {
+      const dateStruktur = Date.now()
+      const typeDataStruktur = this.ukmForm.get('fileStrukturName').value.substr(this.ukmForm.get('fileStrukturName').value.lastIndexOf(".") + 1);
+      const newFileNameStruktur = `UkmStruktur-${dateStruktur}.${typeDataStruktur}`;
+      const filePathStruktur = `Ukm/${newFileNameStruktur}`;
+      const fileRefStruktur = this.angularFirestorage.ref(filePathStruktur);
+      const uploadTaskStruktur = this.angularFirestorage.upload(filePathStruktur, this.fileStrukturPhoto);
 
-                      const data = {
-                        nama: this.ukmForm.get('nama').value,
-                        deskripsi: this.ukmForm.get('deskripsi').value,
-                        telp: this.ukmForm.get('telp').value,
-                        alamat: this.ukmForm.get('alamat').value,
-                        fileLogoName: this.ukmForm.get('fileLogoName').value,
-                        fileStrukturName: this.ukmForm.get('fileStrukturName').value,
-                        imageLogoUrl: urlLogo,
-                        imageStrukturUrl: urlStruktur,
-                      }
+      Swal.fire({
+        title: "Anda Anda sudah yakin melakukan perubahan data ?",
+        text: "Pastikan data yang diinput benar!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: 'Iya',
+        cancelButtonText: 'Tidak',
+        confirmButtonColor: '#07cdae',
+        cancelButtonColor: '#fe7096',
+        reverseButtons: true,
+        showLoaderOnConfirm: true,
+        preConfirm: () => {
+          if (this.fileLogoPhoto !== undefined && this.fileStrukturPhoto !== undefined) {
+            uploadTaskLogo.snapshotChanges().pipe(
+              finalize(() => {
+                fileRefLogo.getDownloadURL().subscribe(urlLogo => {
+                  uploadTaskStruktur.snapshotChanges().pipe(
+                    finalize(() => {
+                      fileRefStruktur.getDownloadURL().subscribe(urlStruktur => {
 
-                      this.ukmService.update(this.key, data)
-                        .catch(error => {
-                          Swal.showValidationMessage(
-                            `Request failed: ${error}`
-                          )
-                        });
-
-                      if (this.kriteria.length !== 0) {
-                        this.kriteria.map(val => {
-                          this.kriteriaService.delete(val.id);
-                        })
-
-                      }
-
-                      let tempKriteria = [];
-
-                      for (let i = 0; i < this.countItem; i++) {
-                        let dataForm = (<FormArray>this.ukmForm.controls['items']).at(i);
-
-                        let tempData = {
-                          idUkm: this.key,
-                          kriteria: dataForm.get('kriteria').value,
-                          dateMake: new Date().getTime()
+                        const data = {
+                          nama: this.ukmForm.get('nama').value,
+                          deskripsi: this.ukmForm.get('deskripsi').value,
+                          telp: this.ukmForm.get('telp').value,
+                          alamat: this.ukmForm.get('alamat').value,
+                          fileLogoName: this.ukmForm.get('fileLogoName').value,
+                          fileStrukturName: this.ukmForm.get('fileStrukturName').value,
+                          imageLogoUrl: urlLogo,
+                          imageStrukturUrl: urlStruktur,
                         }
 
-                        tempKriteria.push(tempData);
-                      }
-
-                      tempKriteria.map(val => {
-                        this.kriteriaService.create(val)
+                        this.ukmService.update(this.key, data)
                           .catch(error => {
                             Swal.showValidationMessage(
                               `Request failed: ${error}`
                             )
                           });
+
+                        if (this.kriteria.length !== 0) {
+                          this.kriteria.map(val => {
+                            this.kriteriaService.delete(val.id);
+                          })
+
+                        }
+
+                        let tempKriteria = [];
+
+                        for (let i = 0; i < this.countItem; i++) {
+                          let dataForm = (<FormArray>this.ukmForm.controls['items']).at(i);
+
+                          let tempData = {
+                            idUkm: this.key,
+                            kriteria: dataForm.get('kriteria').value,
+                            dateMake: new Date().getTime()
+                          }
+
+                          tempKriteria.push(tempData);
+                        }
+
+                        tempKriteria.map(val => {
+                          this.kriteriaService.create(val)
+                            .catch(error => {
+                              Swal.showValidationMessage(
+                                `Request failed: ${error}`
+                              )
+                            });
+                        })
                       })
                     })
-                  })
-                ).subscribe()
-                return uploadTaskStruktur.percentageChanges();
+                  ).subscribe()
+                  return uploadTaskStruktur.percentageChanges();
+                })
               })
-            })
-          ).subscribe()
-          return uploadTaskLogo.percentageChanges();
-        } else if (this.fileLogoPhoto !== undefined && this.fileStrukturPhoto === undefined) {
-          uploadTaskLogo.snapshotChanges().pipe(
-            finalize(() => {
-              fileRefLogo.getDownloadURL().subscribe(urlLogo => {
-                const data = {
-                  nama: this.ukmForm.get('nama').value,
-                  deskripsi: this.ukmForm.get('deskripsi').value,
-                  telp: this.ukmForm.get('telp').value,
-                  alamat: this.ukmForm.get('alamat').value,
-                  fileLogoName: this.ukmForm.get('fileLogoName').value,
-                  imageLogoUrl: urlLogo,
-                }
-
-                this.ukmService.update(this.key, data)
-                  .catch(error => {
-                    Swal.showValidationMessage(
-                      `Request failed: ${error}`
-                    )
-                  });
-
-                if (this.kriteria.length !== 0) {
-                  this.kriteria.map(val => {
-                    this.kriteriaService.delete(val.id);
-                  })
-                }
-
-                let tempKriteria = [];
-
-                for (let i = 0; i < this.countItem; i++) {
-                  let dataForm = (<FormArray>this.ukmForm.controls['items']).at(i);
-
-                  let tempData = {
-                    idUkm: this.key,
-                    kriteria: dataForm.get('kriteria').value,
-                    dateMake: new Date().getTime()
+            ).subscribe()
+            return uploadTaskLogo.percentageChanges();
+          } else if (this.fileLogoPhoto !== undefined && this.fileStrukturPhoto === undefined) {
+            uploadTaskLogo.snapshotChanges().pipe(
+              finalize(() => {
+                fileRefLogo.getDownloadURL().subscribe(urlLogo => {
+                  const data = {
+                    nama: this.ukmForm.get('nama').value,
+                    deskripsi: this.ukmForm.get('deskripsi').value,
+                    telp: this.ukmForm.get('telp').value,
+                    alamat: this.ukmForm.get('alamat').value,
+                    fileLogoName: this.ukmForm.get('fileLogoName').value,
+                    imageLogoUrl: urlLogo,
                   }
 
-                  tempKriteria.push(tempData);
-                }
-
-                tempKriteria.map(val => {
-                  this.kriteriaService.create(val)
+                  this.ukmService.update(this.key, data)
                     .catch(error => {
                       Swal.showValidationMessage(
                         `Request failed: ${error}`
                       )
                     });
-                })
 
-              })
-            })
-          ).subscribe()
-          return uploadTaskLogo.percentageChanges();
-        } else if (this.fileLogoPhoto === undefined && this.fileStrukturPhoto !== undefined) {
-          uploadTaskStruktur.snapshotChanges().pipe(
-            finalize(() => {
-              fileRefStruktur.getDownloadURL().subscribe(urlStruktur => {
-                const data = {
-                  nama: this.ukmForm.get('nama').value,
-                  deskripsi: this.ukmForm.get('deskripsi').value,
-                  telp: this.ukmForm.get('telp').value,
-                  alamat: this.ukmForm.get('alamat').value,
-                  fileStrukturName: this.ukmForm.get('fileStrukturName').value,
-                  imageStrukturUrl: urlStruktur,
-                }
-
-                this.ukmService.update(this.key, data)
-                  .catch(error => {
-                    Swal.showValidationMessage(
-                      `Request failed: ${error}`
-                    )
-                  });
-
-                if (this.kriteria.length !== 0) {
-                  this.kriteria.map(val => {
-                    this.kriteriaService.delete(val.id);
-                  })
-                }
-                let tempKriteria = [];
-
-                for (let i = 0; i < this.countItem; i++) {
-                  let dataForm = (<FormArray>this.ukmForm.controls['items']).at(i);
-
-                  let tempData = {
-                    idUkm: this.key,
-                    kriteria: dataForm.get('kriteria').value,
-                    dateMake: new Date().getTime()
+                  if (this.kriteria.length !== 0) {
+                    this.kriteria.map(val => {
+                      this.kriteriaService.delete(val.id);
+                    })
                   }
 
-                  tempKriteria.push(tempData);
-                }
+                  let tempKriteria = [];
 
-                tempKriteria.map(val => {
-                  this.kriteriaService.create(val)
+                  for (let i = 0; i < this.countItem; i++) {
+                    let dataForm = (<FormArray>this.ukmForm.controls['items']).at(i);
+
+                    let tempData = {
+                      idUkm: this.key,
+                      kriteria: dataForm.get('kriteria').value,
+                      dateMake: new Date().getTime()
+                    }
+
+                    tempKriteria.push(tempData);
+                  }
+
+                  tempKriteria.map(val => {
+                    this.kriteriaService.create(val)
+                      .catch(error => {
+                        Swal.showValidationMessage(
+                          `Request failed: ${error}`
+                        )
+                      });
+                  })
+
+                })
+              })
+            ).subscribe()
+            return uploadTaskLogo.percentageChanges();
+          } else if (this.fileLogoPhoto === undefined && this.fileStrukturPhoto !== undefined) {
+            uploadTaskStruktur.snapshotChanges().pipe(
+              finalize(() => {
+                fileRefStruktur.getDownloadURL().subscribe(urlStruktur => {
+                  const data = {
+                    nama: this.ukmForm.get('nama').value,
+                    deskripsi: this.ukmForm.get('deskripsi').value,
+                    telp: this.ukmForm.get('telp').value,
+                    alamat: this.ukmForm.get('alamat').value,
+                    fileStrukturName: this.ukmForm.get('fileStrukturName').value,
+                    imageStrukturUrl: urlStruktur,
+                  }
+
+                  this.ukmService.update(this.key, data)
                     .catch(error => {
                       Swal.showValidationMessage(
                         `Request failed: ${error}`
                       )
                     });
+
+                  if (this.kriteria.length !== 0) {
+                    this.kriteria.map(val => {
+                      this.kriteriaService.delete(val.id);
+                    })
+                  }
+                  let tempKriteria = [];
+
+                  for (let i = 0; i < this.countItem; i++) {
+                    let dataForm = (<FormArray>this.ukmForm.controls['items']).at(i);
+
+                    let tempData = {
+                      idUkm: this.key,
+                      kriteria: dataForm.get('kriteria').value,
+                      dateMake: new Date().getTime()
+                    }
+
+                    tempKriteria.push(tempData);
+                  }
+
+                  tempKriteria.map(val => {
+                    this.kriteriaService.create(val)
+                      .catch(error => {
+                        Swal.showValidationMessage(
+                          `Request failed: ${error}`
+                        )
+                      });
+                  })
+
                 })
-
               })
-            })
-          ).subscribe()
-          return uploadTaskStruktur.percentageChanges();
-        } else {
-          const data = {
-            nama: this.ukmForm.get('nama').value,
-            deskripsi: this.ukmForm.get('deskripsi').value,
-            telp: this.ukmForm.get('telp').value,
-            alamat: this.ukmForm.get('alamat').value,
-          }
-
-          if (this.kriteria.length !== 0) {
-            this.kriteria.map(val => {
-              this.kriteriaService.delete(val.id);
-            })
-          }
-          let tempKriteria = [];
-
-          for (let i = 0; i < this.countItem; i++) {
-            let dataForm = (<FormArray>this.ukmForm.controls['items']).at(i);
-
-            let tempData = {
-              idUkm: this.key,
-              kriteria: dataForm.get('kriteria').value,
-              dateMake: new Date().getTime()
+            ).subscribe()
+            return uploadTaskStruktur.percentageChanges();
+          } else {
+            const data = {
+              nama: this.ukmForm.get('nama').value,
+              deskripsi: this.ukmForm.get('deskripsi').value,
+              telp: this.ukmForm.get('telp').value,
+              alamat: this.ukmForm.get('alamat').value,
             }
 
-            tempKriteria.push(tempData);
-          }
+            if (this.kriteria.length !== 0) {
+              this.kriteria.map(val => {
+                this.kriteriaService.delete(val.id);
+              })
+            }
+            let tempKriteria = [];
 
-          tempKriteria.map(val => {
-            this.kriteriaService.create(val)
+            for (let i = 0; i < this.countItem; i++) {
+              let dataForm = (<FormArray>this.ukmForm.controls['items']).at(i);
+
+              let tempData = {
+                idUkm: this.key,
+                kriteria: dataForm.get('kriteria').value,
+                dateMake: new Date().getTime()
+              }
+
+              tempKriteria.push(tempData);
+            }
+
+            tempKriteria.map(val => {
+              this.kriteriaService.create(val)
+                .catch(error => {
+                  Swal.showValidationMessage(
+                    `Request failed: ${error}`
+                  )
+                });
+            })
+
+
+            return this.ukmService.update(this.key, data)
               .catch(error => {
                 Swal.showValidationMessage(
                   `Request failed: ${error}`
                 )
               });
-          })
-
-
-          return this.ukmService.update(this.key, data)
-            .catch(error => {
-              Swal.showValidationMessage(
-                `Request failed: ${error}`
-              )
-            });
-        }
-      },
-      allowOutsideClick: () => !Swal.isLoading()
-    }).then((result) => {
-      if (result.isConfirmed) {
-        Swal.fire({
-          icon: 'success',
-          text: 'Data Berhasil Diperbarui',
-          confirmButtonColor: '#07cdae',
-        }).then((result) => {
-          if (result.value) {
-            this.redirectToManage();
           }
-        });
-      }
-    })
+        },
+        allowOutsideClick: () => !Swal.isLoading()
+      }).then((result) => {
+        if (result.isConfirmed) {
+          Swal.fire({
+            icon: 'success',
+            text: 'Data Berhasil Diperbarui',
+            confirmButtonColor: '#07cdae',
+          }).then((result) => {
+            if (result.value) {
+              this.redirectToManage();
+            }
+          });
+        }
+      })
+    }
   }
 }

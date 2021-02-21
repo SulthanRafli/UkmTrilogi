@@ -77,66 +77,66 @@ export class AddProkerComponent implements OnInit {
       this.isFormEmpty = true;
     } else {
       this.isFormEmpty = false;
+
+      const date = Date.now()
+      const typeData = this.prokerForm.get('fileName').value.substr(this.prokerForm.get('fileName').value.lastIndexOf(".") + 1);
+      const newFileName = `Proker-${date}.${typeData}`;
+      const filePath = `Proker/${newFileName}`;
+      const fileRef = this.angularFirestorage.ref(filePath);
+      const uploadTask = this.angularFirestorage.upload(filePath, this.fileProker);
+
+      Swal.fire({
+        title: "Anda sudah yakin melakukan penginputan data ?",
+        text: "Pastikan data yang diinput benar!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: 'Iya',
+        cancelButtonText: 'Tidak',
+        confirmButtonColor: '#07cdae',
+        cancelButtonColor: '#fe7096',
+        reverseButtons: true,
+        showLoaderOnConfirm: true,
+        preConfirm: () => {
+          uploadTask.snapshotChanges().pipe(
+            finalize(() => {
+              fileRef.getDownloadURL().subscribe(url => {
+                const data = {
+                  idUkm: this.ukm.id,
+                  namaUkm: this.ukm.nama,
+                  nama: this.prokerForm.get('nama').value,
+                  namaDivisi: this.prokerForm.get('namaDivisi').value,
+                  tanggal: moment(this.prokerForm.get('tanggal').value).format('YYYY-MM-DD'),
+                  deskripsi: this.prokerForm.get('deskripsi').value,
+                  fileName: this.prokerForm.get('fileName').value,
+                  fileUrl: url,
+                  dateMake: new Date().getTime()
+                }
+
+                this.prokerService.create(data)
+                  .catch(error => {
+                    Swal.showValidationMessage(
+                      `Request failed: ${error}`
+                    )
+                  });
+              });
+            })
+          ).subscribe();
+          return uploadTask.percentageChanges();
+        },
+        allowOutsideClick: () => !Swal.isLoading()
+      }).then((result) => {
+        if (result.isConfirmed) {
+          Swal.fire({
+            icon: 'success',
+            text: 'Data Berhasil Disimpan',
+            confirmButtonColor: '#07cdae',
+          }).then((result) => {
+            if (result.value) {
+              this.redirectToManage();
+            }
+          });
+        }
+      })
     }
-
-    const date = Date.now()
-    const typeData = this.prokerForm.get('fileName').value.substr(this.prokerForm.get('fileName').value.lastIndexOf(".") + 1);
-    const newFileName = `Proker-${date}.${typeData}`;
-    const filePath = `Proker/${newFileName}`;
-    const fileRef = this.angularFirestorage.ref(filePath);
-    const uploadTask = this.angularFirestorage.upload(filePath, this.fileProker);
-
-    Swal.fire({
-      title: "Anda sudah yakin melakukan penginputan data ?",
-      text: "Pastikan data yang diinput benar!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonText: 'Iya',
-      cancelButtonText: 'Tidak',
-      confirmButtonColor: '#07cdae',
-      cancelButtonColor: '#fe7096',
-      reverseButtons: true,
-      showLoaderOnConfirm: true,
-      preConfirm: () => {
-        uploadTask.snapshotChanges().pipe(
-          finalize(() => {
-            fileRef.getDownloadURL().subscribe(url => {
-              const data = {
-                idUkm: this.ukm.id,
-                namaUkm: this.ukm.nama,
-                nama: this.prokerForm.get('nama').value,
-                namaDivisi: this.prokerForm.get('namaDivisi').value,
-                tanggal: moment(this.prokerForm.get('tanggal').value).format('YYYY-MM-DD'),
-                deskripsi: this.prokerForm.get('deskripsi').value,
-                fileName: this.prokerForm.get('fileName').value,
-                fileUrl: url,
-                dateMake: new Date().getTime()
-              }
-
-              this.prokerService.create(data)
-                .catch(error => {
-                  Swal.showValidationMessage(
-                    `Request failed: ${error}`
-                  )
-                });
-            });
-          })
-        ).subscribe();
-        return uploadTask.percentageChanges();
-      },
-      allowOutsideClick: () => !Swal.isLoading()
-    }).then((result) => {
-      if (result.isConfirmed) {
-        Swal.fire({
-          icon: 'success',
-          text: 'Data Berhasil Disimpan',
-          confirmButtonColor: '#07cdae',
-        }).then((result) => {
-          if (result.value) {
-            this.redirectToManage();
-          }
-        });
-      }
-    })
   }
 }

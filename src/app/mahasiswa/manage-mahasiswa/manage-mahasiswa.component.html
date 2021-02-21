@@ -1,0 +1,127 @@
+<div class="page-header">
+  <h3 class="page-title">Manage Mahasiswa</h3>
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        <a routerLink="/mahasiswa/manage-mahasiswa">Mahasiswa</a>
+      </li>
+      <li class="breadcrumb-item active" aria-current="page">List Mahasiswa</li>
+    </ol>
+  </nav>
+</div>
+<div class="row">
+  <div class="col-lg-12 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <div class="card-title">
+          <div class="row">
+            <div class="col-6">
+              <button
+                type="button"
+                routerLink="/mahasiswa/add-mahasiswa"
+                class="btn btn-success btn-sm"
+              >
+                <i class="mdi mdi-plus btn-icon-prepend"></i>
+                Tambah Mahasiswa
+              </button>
+            </div>
+            <div class="col-6">
+              <input
+                class="form-control filter"
+                (keyup)="applyFilter($event.target.value)"
+                placeholder="Filter"
+              />
+            </div>
+          </div>
+        </div>
+        <p class="card-description"></p>
+        <mat-table [dataSource]="dataSource" matSort>
+          <ng-container matColumnDef="no">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>
+              No
+            </mat-header-cell>
+            <mat-cell *matCellDef="let row; let i = index">
+              {{ i + 1 }}
+            </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="nim">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>
+              NIM
+            </mat-header-cell>
+            <mat-cell *matCellDef="let row"> {{ row.nim }} </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="nama">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>
+              Nama
+            </mat-header-cell>
+            <mat-cell *matCellDef="let row"> {{ row.nama }} </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="jenisKelamin">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>
+              Jenis Kelamin
+            </mat-header-cell>
+            <mat-cell *matCellDef="let row"> {{ row.jenisKelamin }} </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="jurusan">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>
+              Jurusan
+            </mat-header-cell>
+            <mat-cell *matCellDef="let row"> {{ row.jurusan }} </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="fakultas">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>
+              Fakultas
+            </mat-header-cell>
+            <mat-cell *matCellDef="let row"> {{ row.fakultas }} </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="aksi">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>
+              Aksi
+            </mat-header-cell>
+            <mat-cell *matCellDef="let row">
+              <div class="d-flex justify-content-between flex-nowrap">
+                <button
+                  type="button"
+                  class="btn btn-gradient-warning btn-sm btn-icon"
+                  routerLink="/mahasiswa/ubah-mahasiswa/{{ row.id }}"
+                >
+                  <i class="mdi mdi-grease-pencil"></i>
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-gradient-danger btn-sm btn-icon"
+                  (click)="delete(row.id)"
+                >
+                  <i class="mdi mdi-delete"></i>
+                </button>
+              </div>
+            </mat-cell>
+          </ng-container>
+
+          <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: displayedColumns"> </mat-row>
+        </mat-table>
+
+        <div *ngIf="dataSource?.data.length === 0" class="no-data">
+          <p class="text-muted">Data Tidak Ditemukan</p>
+        </div>
+
+        <ngx-loading
+          [show]="loading"
+          [config]="{
+            animationType: ngxLoadingAnimationTypes.cubeGrid,            
+            backdropBorderRadius: '3px'
+          }"          
+        ></ngx-loading>
+
+        <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+      </div>
+    </div>
+  </div>
+</div>

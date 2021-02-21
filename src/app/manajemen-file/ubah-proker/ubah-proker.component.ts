@@ -111,81 +111,81 @@ export class UbahProkerComponent implements OnInit {
       this.isFormEmpty = true;
     } else {
       this.isFormEmpty = false;
-    }
 
-    const date = Date.now()
-    const typeData = this.prokerForm.get('fileName').value.substr(this.prokerForm.get('fileName').value.lastIndexOf(".") + 1);
-    const newFileName = `Proker-${date}.${typeData}`;
-    const filePath = `Proker/${newFileName}`;
-    const fileRef = this.angularFirestorage.ref(filePath);
-    const uploadTask = this.angularFirestorage.upload(filePath, this.fileProker);
+      const date = Date.now()
+      const typeData = this.prokerForm.get('fileName').value.substr(this.prokerForm.get('fileName').value.lastIndexOf(".") + 1);
+      const newFileName = `Proker-${date}.${typeData}`;
+      const filePath = `Proker/${newFileName}`;
+      const fileRef = this.angularFirestorage.ref(filePath);
+      const uploadTask = this.angularFirestorage.upload(filePath, this.fileProker);
 
-    Swal.fire({
-      title: "Anda Anda sudah yakin melakukan perubahan data ?",
-      text: "Pastikan data yang diinput benar!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonText: 'Iya',
-      cancelButtonText: 'Tidak',
-      confirmButtonColor: '#07cdae',
-      cancelButtonColor: '#fe7096',
-      reverseButtons: true,
-      showLoaderOnConfirm: true,
-      preConfirm: () => {
-        if (this.fileProker !== undefined) {
-          uploadTask.snapshotChanges().pipe(
-            finalize(() => {
-              fileRef.getDownloadURL().subscribe(url => {
+      Swal.fire({
+        title: "Anda Anda sudah yakin melakukan perubahan data ?",
+        text: "Pastikan data yang diinput benar!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: 'Iya',
+        cancelButtonText: 'Tidak',
+        confirmButtonColor: '#07cdae',
+        cancelButtonColor: '#fe7096',
+        reverseButtons: true,
+        showLoaderOnConfirm: true,
+        preConfirm: () => {
+          if (this.fileProker !== undefined) {
+            uploadTask.snapshotChanges().pipe(
+              finalize(() => {
+                fileRef.getDownloadURL().subscribe(url => {
 
-                const data = {
-                  nama: this.prokerForm.get('nama').value,
-                  namaDivisi: this.prokerForm.get('namaDivisi').value,
-                  tanggal: moment(this.prokerForm.get('tanggal').value).format('YYYY-MM-DD'),
-                  deskripsi: this.prokerForm.get('deskripsi').value,
-                  fileName: this.prokerForm.get('fileName').value,
-                  fileUrl: url,
-                }
+                  const data = {
+                    nama: this.prokerForm.get('nama').value,
+                    namaDivisi: this.prokerForm.get('namaDivisi').value,
+                    tanggal: moment(this.prokerForm.get('tanggal').value).format('YYYY-MM-DD'),
+                    deskripsi: this.prokerForm.get('deskripsi').value,
+                    fileName: this.prokerForm.get('fileName').value,
+                    fileUrl: url,
+                  }
 
-                this.prokerService.update(this.key, data)
-                  .catch(error => {
-                    Swal.showValidationMessage(
-                      `Request failed: ${error}`
-                    )
-                  });
+                  this.prokerService.update(this.key, data)
+                    .catch(error => {
+                      Swal.showValidationMessage(
+                        `Request failed: ${error}`
+                      )
+                    });
+                });
+              })
+            ).subscribe();
+            return uploadTask.percentageChanges();
+          } else {
+
+            const data = {
+              nama: this.prokerForm.get('nama').value,
+              namaDivisi: this.prokerForm.get('namaDivisi').value,
+              tanggal: moment(this.prokerForm.get('tanggal').value).format('YYYY-MM-DD'),
+              deskripsi: this.prokerForm.get('deskripsi').value,
+            }
+
+            return this.prokerService.update(this.key, data)
+              .catch(error => {
+                Swal.showValidationMessage(
+                  `Request failed: ${error}`
+                )
               });
-            })
-          ).subscribe();  
-          return uploadTask.percentageChanges();        
-        } else {
-
-          const data = {
-            nama: this.prokerForm.get('nama').value,
-            namaDivisi: this.prokerForm.get('namaDivisi').value,
-            tanggal: moment(this.prokerForm.get('tanggal').value).format('YYYY-MM-DD'),
-            deskripsi: this.prokerForm.get('deskripsi').value,
           }
-
-          return this.prokerService.update(this.key, data)
-            .catch(error => {
-              Swal.showValidationMessage(
-                `Request failed: ${error}`
-              )
-            });
+        },
+        allowOutsideClick: () => !Swal.isLoading()
+      }).then((result) => {
+        if (result.isConfirmed) {
+          Swal.fire({
+            icon: 'success',
+            text: 'Data Berhasil Diperbarui',
+            confirmButtonColor: '#07cdae',
+          }).then((result) => {
+            if (result.value) {
+              this.redirectToManage();
+            }
+          });
         }
-      },
-      allowOutsideClick: () => !Swal.isLoading()
-    }).then((result) => {
-      if (result.isConfirmed) {
-        Swal.fire({
-          icon: 'success',
-          text: 'Data Berhasil Diperbarui',
-          confirmButtonColor: '#07cdae',
-        }).then((result) => {
-          if (result.value) {
-            this.redirectToManage();
-          }
-        });
-      }
-    })
+      })
+    }
   }
 }

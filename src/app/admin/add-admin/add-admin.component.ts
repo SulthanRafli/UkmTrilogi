@@ -80,71 +80,71 @@ export class AddAdminComponent implements OnInit {
       this.isFormEmpty = true;
     } else {
       this.isFormEmpty = false;
-    }
 
-    const date = Date.now()
-    const typeData = this.adminForm.get('fileName').value.substr(this.adminForm.get('fileName').value.lastIndexOf(".") + 1);
-    const newFileName = `AdminProfile-${date}.${typeData}`;
-    const filePath = `Admin/${newFileName}`;
-    const fileRef = this.angularFirestorage.ref(filePath);
-    const uploadTask = this.angularFirestorage.upload(filePath, this.filePhoto);
+      const date = Date.now()
+      const typeData = this.adminForm.get('fileName').value.substr(this.adminForm.get('fileName').value.lastIndexOf(".") + 1);
+      const newFileName = `AdminProfile-${date}.${typeData}`;
+      const filePath = `Admin/${newFileName}`;
+      const fileRef = this.angularFirestorage.ref(filePath);
+      const uploadTask = this.angularFirestorage.upload(filePath, this.filePhoto);
 
-    Swal.fire({
-      title: "Anda sudah yakin melakukan penginputan data ?",
-      text: "Pastikan data yang diinput benar!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonText: 'Iya',
-      cancelButtonText: 'Tidak',
-      confirmButtonColor: '#07cdae',
-      cancelButtonColor: '#fe7096',
-      reverseButtons: true,
-      showLoaderOnConfirm: true,
-      preConfirm: () => {
-        return this.angularFireAuth.createUserWithEmailAndPassword(this.adminForm.get('email').value, this.adminForm.get('password').value).then(res => {
-          uploadTask.snapshotChanges().pipe(
-            finalize(() => {
-              fileRef.getDownloadURL().subscribe(url => {
+      Swal.fire({
+        title: "Anda sudah yakin melakukan penginputan data ?",
+        text: "Pastikan data yang diinput benar!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: 'Iya',
+        cancelButtonText: 'Tidak',
+        confirmButtonColor: '#07cdae',
+        cancelButtonColor: '#fe7096',
+        reverseButtons: true,
+        showLoaderOnConfirm: true,
+        preConfirm: () => {
+          return this.angularFireAuth.createUserWithEmailAndPassword(this.adminForm.get('email').value, this.adminForm.get('password').value).then(res => {
+            uploadTask.snapshotChanges().pipe(
+              finalize(() => {
+                fileRef.getDownloadURL().subscribe(url => {
 
-                const data = {
-                  nama: this.adminForm.get('nama').value,
-                  telp: this.adminForm.get('telp').value,
-                  email: this.adminForm.get('email').value,
-                  password: this.adminForm.get('password').value,
-                  fileName: this.adminForm.get('fileName').value,
-                  imageUrl: url,
-                  dateMake: new Date().getTime()
-                }
+                  const data = {
+                    nama: this.adminForm.get('nama').value,
+                    telp: this.adminForm.get('telp').value,
+                    email: this.adminForm.get('email').value,
+                    password: this.adminForm.get('password').value,
+                    fileName: this.adminForm.get('fileName').value,
+                    imageUrl: url,
+                    dateMake: new Date().getTime()
+                  }
 
-                this.adminService.create(res.user.uid, data)
-                  .catch(error => {
-                    Swal.showValidationMessage(
-                      `Request failed: ${error}`
-                    )
-                  });
+                  this.adminService.create(res.user.uid, data)
+                    .catch(error => {
+                      Swal.showValidationMessage(
+                        `Request failed: ${error}`
+                      )
+                    });
+                })
               })
-            })
-          ).subscribe()
-          return uploadTask.percentageChanges();
-        }).catch(err => {
-          Swal.showValidationMessage(
-            `Request failed: ${err}`
-          )
-        })
-      },
-      allowOutsideClick: () => !Swal.isLoading()
-    }).then((result) => {
-      if (result.isConfirmed) {
-        Swal.fire({
-          icon: 'success',
-          text: 'Data Berhasil Disimpan',
-          confirmButtonColor: '#07cdae',
-        }).then((result) => {
-          if (result.value) {
-            this.redirectToManage();
-          }
-        });
-      }
-    })
+            ).subscribe()
+            return uploadTask.percentageChanges();
+          }).catch(err => {
+            Swal.showValidationMessage(
+              `Request failed: ${err}`
+            )
+          })
+        },
+        allowOutsideClick: () => !Swal.isLoading()
+      }).then((result) => {
+        if (result.isConfirmed) {
+          Swal.fire({
+            icon: 'success',
+            text: 'Data Berhasil Disimpan',
+            confirmButtonColor: '#07cdae',
+          }).then((result) => {
+            if (result.value) {
+              this.redirectToManage();
+            }
+          });
+        }
+      })
+    }
   }
 }

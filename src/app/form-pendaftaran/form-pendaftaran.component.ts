@@ -13,6 +13,8 @@ import { Ukm } from '../models/ukm.model';
 import { UkmService } from '../services/firebase/ukm.service';
 import { KriteriaService } from '../services/firebase/kriteria.service';
 import { JawabanKriteriaService } from '../services/firebase/jawaban-kriteria.service';
+import { Mahasiswa } from '../models/mahasiswa.model';
+import { MahasiswaService } from '../services/firebase/mahasiswa.service';
 
 @Component({
   selector: 'app-form-pendaftaran',
@@ -31,6 +33,7 @@ export class FormPendaftaranComponent implements OnInit {
   public ukm: Ukm;
   public photoPreview: any;
   private countItem: number = 1;
+  public mahasiswa: Mahasiswa[];
 
   public ngxLoadingAnimationTypes = ngxLoadingAnimationTypes;
 
@@ -44,6 +47,7 @@ export class FormPendaftaranComponent implements OnInit {
     public jawabanKriteriaService: JawabanKriteriaService,
     public ukmService: UkmService,
     public angularFirestorage: AngularFireStorage,
+    public mahasiswaService: MahasiswaService,
     public formBuilder: FormBuilder,
     public location: Location,
     public router: Router,
@@ -87,7 +91,7 @@ export class FormPendaftaranComponent implements OnInit {
 
   formValidation(): void {
     this.pendaftaranForm = this.formBuilder.group({
-      nomorPendaftaran: new FormControl({ value: null, disabled: true }, [Validators.required]),
+      nomorPendaftaran: new FormControl({ value: null, disabled: true }),
       nama: new FormControl(null, [Validators.required]),
       email: new FormControl(null, [Validators.required, Validators.email]),
       jenisKelamin: new FormControl("Laki - laki", [Validators.required]),
@@ -103,6 +107,7 @@ export class FormPendaftaranComponent implements OnInit {
       bakat: new FormControl(null, [Validators.required]),
       alasan: new FormControl(null, [Validators.required]),
       tanya: new FormControl(null, [Validators.required]),
+      nim: new FormControl(null),
       items: new FormArray([])
     });
 
@@ -135,6 +140,53 @@ export class FormPendaftaranComponent implements OnInit {
         this.loading = false;
       },
       (error) => {
+      },
+    );
+  }
+
+  getMahasiswa(): void {
+    this.loading = true;
+    const key = this.pendaftaranForm.get('nim').value;
+    this.mahasiswaService.findByNim(key).pipe(
+    ).subscribe(
+      (data) => {
+        this.mahasiswa = data.map(e => {
+          return {
+            id: e.payload.doc.id,
+            nama: e.payload.doc.data()['nama'],
+            nim: e.payload.doc.data()['nim'],
+            tempatLahir: e.payload.doc.data()['tempatLahir'],
+            tanggalLahir: e.payload.doc.data()['tanggalLahir'],
+            jurusan: e.payload.doc.data()['jurusan'],
+            fakultas: e.payload.doc.data()['fakultas'],
+            alamat: e.payload.doc.data()['alamat'],
+            jenisKelamin: e.payload.doc.data()['jenisKelamin'],
+            email: e.payload.doc.data()['email'],
+            telp: e.payload.doc.data()['telp'],
+          }
+        });
+        if (this.mahasiswa.length !== 0) {
+          this.pendaftaranForm.get('nama').setValue(this.mahasiswa[0].nama);
+          this.pendaftaranForm.get('email').setValue(this.mahasiswa[0].email);
+          this.pendaftaranForm.get('jenisKelamin').setValue(this.mahasiswa[0].jenisKelamin);
+          this.pendaftaranForm.get('telp').setValue(this.mahasiswa[0].telp);
+          this.pendaftaranForm.get('tempatLahir').setValue(this.mahasiswa[0].tempatLahir);
+          this.pendaftaranForm.get('tanggalLahir').setValue(this.mahasiswa[0].tanggalLahir);
+          this.pendaftaranForm.get('jurusan').setValue(this.mahasiswa[0].jurusan);
+          this.pendaftaranForm.get('fakultas').setValue(this.mahasiswa[0].fakultas);
+          this.pendaftaranForm.get('alamat').setValue(this.mahasiswa[0].alamat);
+        } else {
+          Swal.fire({
+            icon: 'error',
+            title: 'Data tidak ditemukan',
+            showConfirmButton: false,
+            timer: 500
+          })
+        }
+        this.loading = false;
+      },
+      (error) => {
+        console.log(error);
       },
     );
   }
@@ -211,122 +263,123 @@ export class FormPendaftaranComponent implements OnInit {
       this.isFormEmpty = true;
     } else {
       this.isFormEmpty = false;
-    }
 
-    const date = Date.now()
-    const typeData = this.pendaftaranForm.get('fileName').value.substr(this.pendaftaranForm.get('fileName').value.lastIndexOf(".") + 1);
-    const newFileName = `PendaftaranProfile-${date}.${typeData}`;
-    const filePath = `Pendaftaran/${newFileName}`;
-    const fileRef = this.angularFirestorage.ref(filePath);
-    const uploadTask = this.angularFirestorage.upload(filePath, this.filePhoto);
 
-    const dateDokumen = Date.now()
-    const typeDataDokumen = this.pendaftaranForm.get('fileNameDokumen').value.substr(this.pendaftaranForm.get('fileNameDokumen').value.lastIndexOf(".") + 1);
-    const newFileNameDokumen = `PendaftaranDokumen-${dateDokumen}.${typeDataDokumen}`;
-    const filePathDokumen = `Pendaftaran/${newFileNameDokumen}`;
-    const fileRefDokumen = this.angularFirestorage.ref(filePathDokumen);
-    const uploadTaskDokumen = this.angularFirestorage.upload(filePathDokumen, this.fileDokumen);
+      const date = Date.now()
+      const typeData = this.pendaftaranForm.get('fileName').value.substr(this.pendaftaranForm.get('fileName').value.lastIndexOf(".") + 1);
+      const newFileName = `PendaftaranProfile-${date}.${typeData}`;
+      const filePath = `Pendaftaran/${newFileName}`;
+      const fileRef = this.angularFirestorage.ref(filePath);
+      const uploadTask = this.angularFirestorage.upload(filePath, this.filePhoto);
 
-    Swal.fire({
-      title: "Anda sudah yakin melakukan penginputan data ?",
-      text: "Pastikan data yang diinput benar!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonText: 'Iya',
-      cancelButtonText: 'Tidak',
-      confirmButtonColor: '#07cdae',
-      cancelButtonColor: '#fe7096',
-      reverseButtons: true,
-      showLoaderOnConfirm: true,
-      preConfirm: () => {
-        uploadTask.snapshotChanges().pipe(
-          finalize(() => {
-            fileRef.getDownloadURL().subscribe(url => {
-              uploadTaskDokumen.snapshotChanges().pipe(
-                finalize(() => {
-                  fileRefDokumen.getDownloadURL().subscribe(urlDokumen => {
-                    const data = {
-                      idUkm: this.key,
-                      namaUkm: this.ukm.nama,
-                      nomorPendaftaran: this.pendaftaranForm.get('nomorPendaftaran').value,
-                      nama: this.pendaftaranForm.get('nama').value,
-                      email: this.pendaftaranForm.get('email').value,
-                      jenisKelamin: this.pendaftaranForm.get('jenisKelamin').value,
-                      telp: this.pendaftaranForm.get('telp').value,
-                      tempatLahir: this.pendaftaranForm.get('tempatLahir').value,
-                      tanggalLahir: moment(this.pendaftaranForm.get('tanggalLahir').value).format('YYYY-MM-DD'),
-                      jurusan: this.pendaftaranForm.get('jurusan').value,
-                      fakultas: this.pendaftaranForm.get('fakultas').value,
-                      alamat: this.pendaftaranForm.get('alamat').value,
-                      fileName: this.pendaftaranForm.get('fileName').value,
-                      imageUrl: url,
-                      fileNameDokumen: this.pendaftaranForm.get('fileNameDokumen').value,
-                      imageDokumenUrl: urlDokumen,
-                      hobi: this.pendaftaranForm.get('hobi').value,
-                      bakat: this.pendaftaranForm.get('bakat').value,
-                      alasan: this.pendaftaranForm.get('alasan').value,
-                      tanya: this.pendaftaranForm.get('tanya').value,
-                      status: 'pending',
-                      tanggalDaftar: moment().format('YYYY-MM-DD'),
-                      dateMake: new Date().getTime()
-                    }
+      const dateDokumen = Date.now()
+      const typeDataDokumen = this.pendaftaranForm.get('fileNameDokumen').value.substr(this.pendaftaranForm.get('fileNameDokumen').value.lastIndexOf(".") + 1);
+      const newFileNameDokumen = `PendaftaranDokumen-${dateDokumen}.${typeDataDokumen}`;
+      const filePathDokumen = `Pendaftaran/${newFileNameDokumen}`;
+      const fileRefDokumen = this.angularFirestorage.ref(filePathDokumen);
+      const uploadTaskDokumen = this.angularFirestorage.upload(filePathDokumen, this.fileDokumen);
 
-                    this.pendaftaranService.create(data)
-                      .catch(error => {
-                        Swal.showValidationMessage(
-                          `Request failed: ${error}`
-                        )
-                      });
-
-                    let tempKriteria = [];
-
-                    for (let i = 0; i < this.countItem; i++) {
-                      let dataForm = (<FormArray>this.pendaftaranForm.controls['items']).at(i);
-
-                      let tempData = {
+      Swal.fire({
+        title: "Anda sudah yakin melakukan penginputan data ?",
+        text: "Pastikan data yang diinput benar!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: 'Iya',
+        cancelButtonText: 'Tidak',
+        confirmButtonColor: '#07cdae',
+        cancelButtonColor: '#fe7096',
+        reverseButtons: true,
+        showLoaderOnConfirm: true,
+        preConfirm: () => {
+          uploadTask.snapshotChanges().pipe(
+            finalize(() => {
+              fileRef.getDownloadURL().subscribe(url => {
+                uploadTaskDokumen.snapshotChanges().pipe(
+                  finalize(() => {
+                    fileRefDokumen.getDownloadURL().subscribe(urlDokumen => {
+                      const data = {
                         idUkm: this.key,
+                        namaUkm: this.ukm.nama,
                         nomorPendaftaran: this.pendaftaranForm.get('nomorPendaftaran').value,
-                        kriteria: dataForm.get('kriteria').value,
-                        jawaban: dataForm.get('jawaban').value,
+                        nama: this.pendaftaranForm.get('nama').value,
+                        email: this.pendaftaranForm.get('email').value,
+                        jenisKelamin: this.pendaftaranForm.get('jenisKelamin').value,
+                        telp: this.pendaftaranForm.get('telp').value,
+                        tempatLahir: this.pendaftaranForm.get('tempatLahir').value,
+                        tanggalLahir: moment(this.pendaftaranForm.get('tanggalLahir').value).format('YYYY-MM-DD'),
+                        jurusan: this.pendaftaranForm.get('jurusan').value,
+                        fakultas: this.pendaftaranForm.get('fakultas').value,
+                        alamat: this.pendaftaranForm.get('alamat').value,
+                        fileName: this.pendaftaranForm.get('fileName').value,
+                        imageUrl: url,
+                        fileNameDokumen: this.pendaftaranForm.get('fileNameDokumen').value,
+                        imageDokumenUrl: urlDokumen,
+                        hobi: this.pendaftaranForm.get('hobi').value,
+                        bakat: this.pendaftaranForm.get('bakat').value,
+                        alasan: this.pendaftaranForm.get('alasan').value,
+                        tanya: this.pendaftaranForm.get('tanya').value,
+                        status: 'pending',
+                        tanggalDaftar: moment().format('YYYY-MM-DD'),
                         dateMake: new Date().getTime()
                       }
 
-                      tempKriteria.push(tempData);
-                    }
-
-                    tempKriteria.map(val => {
-                      this.jawabanKriteriaService.create(val)
+                      this.pendaftaranService.create(data)
                         .catch(error => {
                           Swal.showValidationMessage(
                             `Request failed: ${error}`
                           )
                         });
+
+                      let tempKriteria = [];
+
+                      for (let i = 0; i < this.countItem; i++) {
+                        let dataForm = (<FormArray>this.pendaftaranForm.controls['items']).at(i);
+
+                        let tempData = {
+                          idUkm: this.key,
+                          nomorPendaftaran: this.pendaftaranForm.get('nomorPendaftaran').value,
+                          kriteria: dataForm.get('kriteria').value,
+                          jawaban: dataForm.get('jawaban').value,
+                          dateMake: new Date().getTime()
+                        }
+
+                        tempKriteria.push(tempData);
+                      }
+
+                      tempKriteria.map(val => {
+                        this.jawabanKriteriaService.create(val)
+                          .catch(error => {
+                            Swal.showValidationMessage(
+                              `Request failed: ${error}`
+                            )
+                          });
+                      })
                     })
                   })
-                })
-              ).subscribe()
-              return uploadTaskDokumen.percentageChanges();
-            });
-          })
-        ).subscribe();
-        return uploadTask.percentageChanges();
-      },
-      allowOutsideClick: () => !Swal.isLoading()
-    }).then((result) => {
-      if (result.isConfirmed) {
-        Swal.fire({
-          icon: 'success',
-          title: 'Pendaftaran Berhasil',
-          text: `
+                ).subscribe()
+                return uploadTaskDokumen.percentageChanges();
+              });
+            })
+          ).subscribe();
+          return uploadTask.percentageChanges();
+        },
+        allowOutsideClick: () => !Swal.isLoading()
+      }).then((result) => {
+        if (result.isConfirmed) {
+          Swal.fire({
+            icon: 'success',
+            title: 'Pendaftaran Berhasil',
+            text: `
           Anda telah terdaftar dengan no ${this.pendaftaranForm.get('nomorPendaftaran').value} harap disimpan untuk 
           pendaftaran tersebut untuk mengecek pengumuman hasil, anda akan diarahkan ke halaman hasil pengumuman`,
-          confirmButtonColor: '#07cdae',
-        }).then((result) => {
-          if (result.value) {
-            this.redirectToPengumuman();
-          }
-        });
-      }
-    })
+            confirmButtonColor: '#07cdae',
+          }).then((result) => {
+            if (result.value) {
+              this.redirectToPengumuman();
+            }
+          });
+        }
+      })
+    }
   }
 }

@@ -76,65 +76,65 @@ export class AddLpjComponent implements OnInit {
       this.isFormEmpty = true;
     } else {
       this.isFormEmpty = false;
+
+      const date = Date.now()
+      const typeData = this.lpjForm.get('fileName').value.substr(this.lpjForm.get('fileName').value.lastIndexOf(".") + 1);
+      const newFileName = `Lpj-${date}.${typeData}`;
+      const filePath = `Lpj/${newFileName}`;
+      const fileRef = this.angularFirestorage.ref(filePath);
+      const uploadTask = this.angularFirestorage.upload(filePath, this.fileLpj);
+
+      Swal.fire({
+        title: "Anda sudah yakin melakukan penginputan data ?",
+        text: "Pastikan data yang diinput benar!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: 'Iya',
+        cancelButtonText: 'Tidak',
+        confirmButtonColor: '#07cdae',
+        cancelButtonColor: '#fe7096',
+        reverseButtons: true,
+        showLoaderOnConfirm: true,
+        preConfirm: () => {
+          uploadTask.snapshotChanges().pipe(
+            finalize(() => {
+              fileRef.getDownloadURL().subscribe(url => {
+                const data = {
+                  idUkm: this.ukm.id,
+                  namaUkm: this.ukm.nama,
+                  judul: this.lpjForm.get('judul').value,
+                  namaDivisi: this.lpjForm.get('namaDivisi').value,
+                  tanggalPeriode: moment(this.lpjForm.get('tanggalPeriode').value).format('YYYY-MM-DD'),
+                  fileName: this.lpjForm.get('fileName').value,
+                  fileUrl: url,
+                  dateMake: new Date().getTime()
+                }
+
+                this.lpjService.create(data)
+                  .catch(error => {
+                    Swal.showValidationMessage(
+                      `Request failed: ${error}`
+                    )
+                  });
+              });
+            })
+          ).subscribe();
+          return uploadTask.percentageChanges();
+        },
+        allowOutsideClick: () => !Swal.isLoading()
+      }).then((result) => {
+        if (result.isConfirmed) {
+          Swal.fire({
+            icon: 'success',
+            text: 'Data Berhasil Disimpan',
+            confirmButtonColor: '#07cdae',
+          }).then((result) => {
+            if (result.value) {
+              this.redirectToManage();
+            }
+          });
+        }
+      })
     }
-
-    const date = Date.now()
-    const typeData = this.lpjForm.get('fileName').value.substr(this.lpjForm.get('fileName').value.lastIndexOf(".") + 1);
-    const newFileName = `Lpj-${date}.${typeData}`;
-    const filePath = `Lpj/${newFileName}`;
-    const fileRef = this.angularFirestorage.ref(filePath);
-    const uploadTask = this.angularFirestorage.upload(filePath, this.fileLpj);
-
-    Swal.fire({
-      title: "Anda sudah yakin melakukan penginputan data ?",
-      text: "Pastikan data yang diinput benar!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonText: 'Iya',
-      cancelButtonText: 'Tidak',
-      confirmButtonColor: '#07cdae',
-      cancelButtonColor: '#fe7096',
-      reverseButtons: true,
-      showLoaderOnConfirm: true,
-      preConfirm: () => {
-        uploadTask.snapshotChanges().pipe(
-          finalize(() => {
-            fileRef.getDownloadURL().subscribe(url => {
-              const data = {
-                idUkm: this.ukm.id,
-                namaUkm: this.ukm.nama,
-                judul: this.lpjForm.get('judul').value,
-                namaDivisi: this.lpjForm.get('namaDivisi').value,
-                tanggalPeriode: moment(this.lpjForm.get('tanggalPeriode').value).format('YYYY-MM-DD'),
-                fileName: this.lpjForm.get('fileName').value,
-                fileUrl: url,
-                dateMake: new Date().getTime()
-              }
-
-              this.lpjService.create(data)
-                .catch(error => {
-                  Swal.showValidationMessage(
-                    `Request failed: ${error}`
-                  )
-                });
-            });
-          })
-        ).subscribe();
-        return uploadTask.percentageChanges();
-      },
-      allowOutsideClick: () => !Swal.isLoading()
-    }).then((result) => {
-      if (result.isConfirmed) {
-        Swal.fire({
-          icon: 'success',
-          text: 'Data Berhasil Disimpan',
-          confirmButtonColor: '#07cdae',
-        }).then((result) => {
-          if (result.value) {
-            this.redirectToManage();
-          }
-        });
-      }
-    })
   }
 }

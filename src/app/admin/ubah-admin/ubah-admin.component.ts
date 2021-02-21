@@ -109,76 +109,76 @@ export class UbahAdminComponent implements OnInit {
       this.isFormEmpty = true;
     } else {
       this.isFormEmpty = false;
-    }
 
-    const date = Date.now()
-    const typeData = this.adminForm.get('fileName').value.substr(this.adminForm.get('fileName').value.lastIndexOf(".") + 1);
-    const newFileName = `${date}.${typeData}`;
-    const filePath = `Admin/${newFileName}`;
-    const fileRef = this.angularFirestorage.ref(filePath);
-    const uploadTask = this.angularFirestorage.upload(filePath, this.filePhoto);
+      const date = Date.now()
+      const typeData = this.adminForm.get('fileName').value.substr(this.adminForm.get('fileName').value.lastIndexOf(".") + 1);
+      const newFileName = `${date}.${typeData}`;
+      const filePath = `Admin/${newFileName}`;
+      const fileRef = this.angularFirestorage.ref(filePath);
+      const uploadTask = this.angularFirestorage.upload(filePath, this.filePhoto);
 
-    Swal.fire({
-      title: "Anda Anda sudah yakin melakukan perubahan data ?",
-      text: "Pastikan data yang diinput benar!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonText: 'Iya',
-      cancelButtonText: 'Tidak',
-      confirmButtonColor: '#07cdae',
-      cancelButtonColor: '#fe7096',
-      reverseButtons: true,
-      showLoaderOnConfirm: true,
-      preConfirm: () => {
-        if (this.filePhoto !== undefined) {
-          uploadTask.snapshotChanges().pipe(
-            finalize(() => {
-              fileRef.getDownloadURL().subscribe(url => {
+      Swal.fire({
+        title: "Anda Anda sudah yakin melakukan perubahan data ?",
+        text: "Pastikan data yang diinput benar!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: 'Iya',
+        cancelButtonText: 'Tidak',
+        confirmButtonColor: '#07cdae',
+        cancelButtonColor: '#fe7096',
+        reverseButtons: true,
+        showLoaderOnConfirm: true,
+        preConfirm: () => {
+          if (this.filePhoto !== undefined) {
+            uploadTask.snapshotChanges().pipe(
+              finalize(() => {
+                fileRef.getDownloadURL().subscribe(url => {
 
-                const data = {
-                  nama: this.adminForm.get('nama').value,
-                  telp: this.adminForm.get('telp').value,
-                  fileName: this.adminForm.get('fileName').value,
-                  imageUrl: url
-                }
+                  const data = {
+                    nama: this.adminForm.get('nama').value,
+                    telp: this.adminForm.get('telp').value,
+                    fileName: this.adminForm.get('fileName').value,
+                    imageUrl: url
+                  }
 
-                this.adminService.update(this.key, data)
-                  .catch(error => {
-                    Swal.showValidationMessage(
-                      `Request failed: ${error}`
-                    )
-                  });
+                  this.adminService.update(this.key, data)
+                    .catch(error => {
+                      Swal.showValidationMessage(
+                        `Request failed: ${error}`
+                      )
+                    });
+                })
               })
-            })
-          ).subscribe()
-          return uploadTask.percentageChanges();
-        } else {
-          const data = {
-            nama: this.adminForm.get('nama').value,
-            telp: this.adminForm.get('telp').value,
-          }
+            ).subscribe()
+            return uploadTask.percentageChanges();
+          } else {
+            const data = {
+              nama: this.adminForm.get('nama').value,
+              telp: this.adminForm.get('telp').value,
+            }
 
-          return this.adminService.update(this.key, data)
-            .catch(error => {
-              Swal.showValidationMessage(
-                `Request failed: ${error}`
-              )
-            });
-        }
-      },
-      allowOutsideClick: () => !Swal.isLoading()
-    }).then((result) => {
-      if (result.isConfirmed) {
-        Swal.fire({
-          icon: 'success',
-          text: 'Data Berhasil Diperbarui',
-          confirmButtonColor: '#07cdae',
-        }).then((result) => {
-          if (result.value) {
-            this.redirectToManage();
+            return this.adminService.update(this.key, data)
+              .catch(error => {
+                Swal.showValidationMessage(
+                  `Request failed: ${error}`
+                )
+              });
           }
-        });
-      }
-    })
+        },
+        allowOutsideClick: () => !Swal.isLoading()
+      }).then((result) => {
+        if (result.isConfirmed) {
+          Swal.fire({
+            icon: 'success',
+            text: 'Data Berhasil Diperbarui',
+            confirmButtonColor: '#07cdae',
+          }).then((result) => {
+            if (result.value) {
+              this.redirectToManage();
+            }
+          });
+        }
+      })
+    }
   }
 }

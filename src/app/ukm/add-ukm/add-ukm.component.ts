@@ -134,111 +134,112 @@ export class AddUkmComponent implements OnInit {
       this.isFormEmpty = true;
     } else {
       this.isFormEmpty = false;
-    }
 
-    const dateLogo = Date.now()
-    const typeDataLogo = this.ukmForm.get('fileLogoName').value.substr(this.ukmForm.get('fileLogoName').value.lastIndexOf(".") + 1);
-    const newFileNameLogo = `UkmLogo-${dateLogo}.${typeDataLogo}`;
-    const filePathLogo = `Ukm/${newFileNameLogo}`;
-    const fileRefLogo = this.angularFirestorage.ref(filePathLogo);
-    const uploadTaskLogo = this.angularFirestorage.upload(filePathLogo, this.fileLogoPhoto);
 
-    const dateStruktur = Date.now()
-    const typeDataStruktur = this.ukmForm.get('fileStrukturName').value.substr(this.ukmForm.get('fileStrukturName').value.lastIndexOf(".") + 1);
-    const newFileNameStruktur = `UkmStruktur-${dateStruktur}.${typeDataStruktur}`;
-    const filePathStruktur = `Ukm/${newFileNameStruktur}`;
-    const fileRefStruktur = this.angularFirestorage.ref(filePathStruktur);
-    const uploadTaskStruktur = this.angularFirestorage.upload(filePathStruktur, this.fileStrukturPhoto);
+      const dateLogo = Date.now()
+      const typeDataLogo = this.ukmForm.get('fileLogoName').value.substr(this.ukmForm.get('fileLogoName').value.lastIndexOf(".") + 1);
+      const newFileNameLogo = `UkmLogo-${dateLogo}.${typeDataLogo}`;
+      const filePathLogo = `Ukm/${newFileNameLogo}`;
+      const fileRefLogo = this.angularFirestorage.ref(filePathLogo);
+      const uploadTaskLogo = this.angularFirestorage.upload(filePathLogo, this.fileLogoPhoto);
 
-    Swal.fire({
-      title: "Anda sudah yakin melakukan penginputan data ?",
-      text: "Pastikan data yang diinput benar!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonText: 'Iya',
-      cancelButtonText: 'Tidak',
-      confirmButtonColor: '#07cdae',
-      cancelButtonColor: '#fe7096',
-      reverseButtons: true,
-      showLoaderOnConfirm: true,
-      preConfirm: () => {
-        uploadTaskLogo.snapshotChanges().pipe(
-          finalize(() => {
-            fileRefLogo.getDownloadURL().subscribe(urlLogo => {
-              uploadTaskStruktur.snapshotChanges().pipe(
-                finalize(() => {
-                  fileRefStruktur.getDownloadURL().subscribe(urlStruktur => {
-                    this.angularFireAuth.createUserWithEmailAndPassword(this.ukmForm.get('email').value, this.ukmForm.get('password').value).then(res => {
-                      const data = {
-                        nama: this.ukmForm.get('nama').value,
-                        deskripsi: this.ukmForm.get('deskripsi').value,
-                        telp: this.ukmForm.get('telp').value,
-                        alamat: this.ukmForm.get('alamat').value,
-                        fileLogoName: this.ukmForm.get('fileLogoName').value,
-                        fileStrukturName: this.ukmForm.get('fileStrukturName').value,
-                        email: this.ukmForm.get('email').value,
-                        password: this.ukmForm.get('password').value,
-                        imageLogoUrl: urlLogo,
-                        imageStrukturUrl: urlStruktur,
-                        dateMake: new Date().getTime()
-                      }
+      const dateStruktur = Date.now()
+      const typeDataStruktur = this.ukmForm.get('fileStrukturName').value.substr(this.ukmForm.get('fileStrukturName').value.lastIndexOf(".") + 1);
+      const newFileNameStruktur = `UkmStruktur-${dateStruktur}.${typeDataStruktur}`;
+      const filePathStruktur = `Ukm/${newFileNameStruktur}`;
+      const fileRefStruktur = this.angularFirestorage.ref(filePathStruktur);
+      const uploadTaskStruktur = this.angularFirestorage.upload(filePathStruktur, this.fileStrukturPhoto);
 
-                      this.ukmService.create(res.user.uid, data)
-                        .catch(error => {
-                          Swal.showValidationMessage(
-                            `Request failed: ${error}`
-                          )
-                        });
-
-                      let tempKriteria = [];
-
-                      for (let i = 0; i < this.countItem; i++) {
-                        let dataForm = (<FormArray>this.ukmForm.controls['items']).at(i);
-
-                        let tempData = {
-                          idUkm: res.user.uid,
-                          kriteria: dataForm.get('kriteria').value,
+      Swal.fire({
+        title: "Anda sudah yakin melakukan penginputan data ?",
+        text: "Pastikan data yang diinput benar!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: 'Iya',
+        cancelButtonText: 'Tidak',
+        confirmButtonColor: '#07cdae',
+        cancelButtonColor: '#fe7096',
+        reverseButtons: true,
+        showLoaderOnConfirm: true,
+        preConfirm: () => {
+          uploadTaskLogo.snapshotChanges().pipe(
+            finalize(() => {
+              fileRefLogo.getDownloadURL().subscribe(urlLogo => {
+                uploadTaskStruktur.snapshotChanges().pipe(
+                  finalize(() => {
+                    fileRefStruktur.getDownloadURL().subscribe(urlStruktur => {
+                      this.angularFireAuth.createUserWithEmailAndPassword(this.ukmForm.get('email').value, this.ukmForm.get('password').value).then(res => {
+                        const data = {
+                          nama: this.ukmForm.get('nama').value,
+                          deskripsi: this.ukmForm.get('deskripsi').value,
+                          telp: this.ukmForm.get('telp').value,
+                          alamat: this.ukmForm.get('alamat').value,
+                          fileLogoName: this.ukmForm.get('fileLogoName').value,
+                          fileStrukturName: this.ukmForm.get('fileStrukturName').value,
+                          email: this.ukmForm.get('email').value,
+                          password: this.ukmForm.get('password').value,
+                          imageLogoUrl: urlLogo,
+                          imageStrukturUrl: urlStruktur,
                           dateMake: new Date().getTime()
                         }
 
-                        tempKriteria.push(tempData);
-                      }
-
-                      tempKriteria.map(val => {
-                        this.kriteriaService.create(val)
+                        this.ukmService.create(res.user.uid, data)
                           .catch(error => {
                             Swal.showValidationMessage(
                               `Request failed: ${error}`
                             )
                           });
+
+                        let tempKriteria = [];
+
+                        for (let i = 0; i < this.countItem; i++) {
+                          let dataForm = (<FormArray>this.ukmForm.controls['items']).at(i);
+
+                          let tempData = {
+                            idUkm: res.user.uid,
+                            kriteria: dataForm.get('kriteria').value,
+                            dateMake: new Date().getTime()
+                          }
+
+                          tempKriteria.push(tempData);
+                        }
+
+                        tempKriteria.map(val => {
+                          this.kriteriaService.create(val)
+                            .catch(error => {
+                              Swal.showValidationMessage(
+                                `Request failed: ${error}`
+                              )
+                            });
+                        })
+                      }).catch(err => {
+                        Swal.showValidationMessage(
+                          `Request failed: ${err}`
+                        )
                       })
-                    }).catch(err => {
-                      Swal.showValidationMessage(
-                        `Request failed: ${err}`
-                      )
                     })
                   })
-                })
-              ).subscribe()
-              return uploadTaskStruktur.percentageChanges();
+                ).subscribe()
+                return uploadTaskStruktur.percentageChanges();
+              })
             })
-          })
-        ).subscribe()
-        return uploadTaskLogo.percentageChanges();
-      },
-      allowOutsideClick: () => !Swal.isLoading()
-    }).then((result) => {
-      if (result.isConfirmed) {
-        Swal.fire({
-          icon: 'success',
-          text: 'Data Berhasil Disimpan',
-          confirmButtonColor: '#07cdae',
-        }).then((result) => {
-          if (result.value) {
-            this.redirectToManage();
-          }
-        });
-      }
-    })
+          ).subscribe()
+          return uploadTaskLogo.percentageChanges();
+        },
+        allowOutsideClick: () => !Swal.isLoading()
+      }).then((result) => {
+        if (result.isConfirmed) {
+          Swal.fire({
+            icon: 'success',
+            text: 'Data Berhasil Disimpan',
+            confirmButtonColor: '#07cdae',
+          }).then((result) => {
+            if (result.value) {
+              this.redirectToManage();
+            }
+          });
+        }
+      })
+    }
   }
 }
