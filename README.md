@@ -1,31 +1,42 @@
-# Purple Angular
+# UkmTrilogi
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 10.1.7.
+UKM Trilogy is a web application to manage and inform student activity units.
 
-<h1>Demo</h1>
+![Web Status](https://img.shields.io/website.svg?url=https://webukmtrilogi.firebaseapp.com&style=for-the-badge)
 
-[![N|Solid](preview.jpg)](https://bootstrapdash.com/demo/purple-angular-free/preview/dashboard/)
+## ✨ Demo
+Web url: https://webukmtrilogi.firebaseapp.com
 
-## Development server
+You can use the account below for login access
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+| Username  | Password  | Role   |
+| --------- | --------- | ------ |
+| msulthanraflim@gmail.com     | sulthan123     | Admin  |
+| seni@gmail.com | seni123       | UKM |
 
-## Code scaffolding
+## 📸 Screenshots
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+![Screenshot1](https://cdn.discordapp.com/attachments/626766421086568448/983380585655464036/Web_capture_6-6-2022_214220_webukmtrilogi.firebaseapp.com.jpeg)
+![Screenshot2](https://cdn.discordapp.com/attachments/626766421086568448/983380585420574840/Web_capture_6-6-2022_214233_webukmtrilogi.firebaseapp.com.jpeg)
+![Screenshot3](https://cdn.discordapp.com/attachments/626766421086568448/983380585173090404/Web_capture_6-6-2022_214249_webukmtrilogi.firebaseapp.com.jpeg)
+![Screenshot4](https://cdn.discordapp.com/attachments/626766421086568448/983380584942415922/Web_capture_6-6-2022_21438_webukmtrilogi.firebaseapp.com.jpeg)
 
-## Build
+## 🛠️ Development
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+```
 
-## Running unit tests
+# Install Node.JS
+# Install Angular
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+# Clone the project
+$ git clone https://github.com/SulthanRafli/UkmTrilogi.git
+$ npm i
+$ ng serve
 
-## Running end-to-end tests
+$ Run dev server
+$ localhost:4200 (default)
+```
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+## 💡 Contributions 
 
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+If something is not working properly feel free to write an issue.
